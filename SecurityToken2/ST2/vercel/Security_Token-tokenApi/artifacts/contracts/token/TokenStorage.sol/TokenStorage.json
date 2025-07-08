@@ -1,0 +1,10 @@
+{
+  "_format": "hh-sol-artifact-1",
+  "contractName": "TokenStorage",
+  "sourceName": "contracts/token/TokenStorage.sol",
+  "abi": [],
+  "bytecode": "0x60808060405234601d5760ff1960085416600855603a908160238239f35b600080fdfe600080fdfea2646970667358221220924536d8a8cb1a6ea9dbfa2340e63c6a66a5fac9c225f65b6700b954118c998964736f6c63430008110033",
+  "deployedBytecode": "0x600080fdfea2646970667358221220924536d8a8cb1a6ea9dbfa2340e63c6a66a5fac9c225f65b6700b954118c998964736f6c63430008110033",
+  "linkReferences": {},
+  "deployedLinkReferences": {}
+}

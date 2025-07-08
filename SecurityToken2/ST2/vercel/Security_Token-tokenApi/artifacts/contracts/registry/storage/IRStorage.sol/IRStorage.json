@@ -1,0 +1,10 @@
+{
+  "_format": "hh-sol-artifact-1",
+  "contractName": "IRStorage",
+  "sourceName": "contracts/registry/storage/IRStorage.sol",
+  "abi": [],
+  "bytecode": "0x60808060405234601357603a908160198239f35b600080fdfe600080fdfea26469706673582212200f5d13cf48ac660bb338756b916c8f71da46479ac327c05002d8752afdf7ef0264736f6c63430008110033",
+  "deployedBytecode": "0x600080fdfea26469706673582212200f5d13cf48ac660bb338756b916c8f71da46479ac327c05002d8752afdf7ef0264736f6c63430008110033",
+  "linkReferences": {},
+  "deployedLinkReferences": {}
+}

@@ -1,0 +1,38 @@
+{
+  "name": "securitytoken",
+  "version": "1.0.0",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "description": "",
+  "devDependencies": {
+    "@nomicfoundation/hardhat-chai-matchers": "^2.0.7",
+    "@nomicfoundation/hardhat-network-helpers": "^1.0.11",
+    "@nomicfoundation/hardhat-toolbox": "^5.0.0",
+    "@onchain-id/identity-sdk": "^1.7.1",
+    "@onchain-id/solidity": "2.2.1",
+    "@openzeppelin/contracts": "^4.8.3",
+    "@openzeppelin/contracts-upgradeable": "^4.8.3",
+    "@tokenysolutions/t-rex": "^4.1.4",
+    "hardhat": "^2.22.18"
+  },
+  "dependencies": {
+    "@nomiclabs/hardhat-waffle": "^2.0.6",
+    "@openzeppelin/contracts-upgradeable": "^5.0.2",
+    "@openzeppelin/hardhat-upgrades": "^3.3.0",
+    "axios": "^1.10.0",
+    "body-parser": "^2.2.0",
+    "cors": "^2.8.5",
+    "crypto-js": "^4.2.0",
+    "deflate-js": "^0.2.3",
+    "dotenv": "^16.4.5",
+    "ethers": "^6.13.4",
+    "express": "^5.1.0",
+    "node-cron": "^4.2.0",
+    "nodemon": "^3.1.10"
+  }
+}

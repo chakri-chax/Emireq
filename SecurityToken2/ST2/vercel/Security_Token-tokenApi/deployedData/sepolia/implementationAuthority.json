@@ -1,0 +1,3651 @@
+{
+  "trexImplementationAuthority": {
+    "target": "0x503d511b5a7309edADEEf11aD3C8B9CE016A4220",
+    "interface": {
+      "fragments": [
+        {
+          "type": "constructor",
+          "inputs": [
+            {
+              "name": "referenceStatus",
+              "type": "bool",
+              "baseType": "bool",
+              "components": null,
+              "arrayLength": null,
+              "arrayChildren": null
+            },
+            {
+              "name": "trexFactory",
+              "type": "address",
+              "baseType": "address",
+              "components": null,
+              "arrayLength": null,
+              "arrayChildren": null
+            },
+            {
+              "name": "iaFactory",
+              "type": "address",
+              "baseType": "address",
+              "components": null,
+              "arrayLength": null,
+              "arrayChildren": null
+            }
+          ],
+          "payable": false,
+          "gas": null
+        },
+        {
+          "type": "event",
+          "inputs": [
+            {
+              "name": "iaFactory",
+              "type": "address",
+              "baseType": "address",
+              "indexed": true,
+              "components": null,
+              "arrayLength": null,
+              "arrayChildren": null
+            }
+          ],
+          "name": "IAFactorySet",
+          "anonymous": false
+        },
+        {
+          "type": "event",
+          "inputs": [
+            {
+              "name": "_token",
+              "type": "address",
+              "baseType": "address",
+              "indexed": true,
+              "components": null,
+              "arrayLength": null,
+              "arrayChildren": null
+            },
+            {
+              "name": "_newImplementationAuthority",
+              "type": "address",
+              "baseType": "address",
+              "indexed": true,
+              "components": null,
+              "arrayLength": null,
+              "arrayChildren": null
+            }
+          ],
+          "name": "ImplementationAuthorityChanged",
+          "anonymous": false
+        },
+        {
+          "type": "event",
+          "inputs": [
+            {
+              "name": "referenceStatus",
+              "type": "bool",
+              "baseType": "bool",
+              "indexed": false,
+              "components": null,
+              "arrayLength": null,
+              "arrayChildren": null
+            },
+            {
+              "name": "trexFactory",
+              "type": "address",
+              "baseType": "address",
+              "indexed": false,
+              "components": null,
+              "arrayLength": null,
+              "arrayChildren": null
+            }
+          ],
+          "name": "ImplementationAuthoritySet",
+          "anonymous": false
+        },
+        {
+          "type": "event",
+          "inputs": [
+            {
+              "name": "previousOwner",
+              "type": "address",
+              "baseType": "address",
+              "indexed": true,
+              "components": null,
+              "arrayLength": null,
+              "arrayChildren": null
+            },
+            {
+              "name": "newOwner",
+              "type": "address",
+              "baseType": "address",
+              "indexed": true,
+              "components": null,
+              "arrayLength": null,
+              "arrayChildren": null
+            }
+          ],
+          "name": "OwnershipTransferred",
+          "anonymous": false
+        },
+        {
+          "type": "event",
+          "inputs": [
+            {
+              "name": "trexFactory",
+              "type": "address",
+              "baseType": "address",
+              "indexed": true,
+              "components": null,
+              "arrayLength": null,
+              "arrayChildren": null
+            }
+          ],
+          "name": "TREXFactorySet",
+          "anonymous": false
+        },
+        {
+          "type": "event",
+          "inputs": [
+            {
+              "name": "version",
+              "type": "tuple",
+              "baseType": "tuple",
+              "indexed": true,
+              "components": [
+                {
+                  "name": "major",
+                  "type": "uint8",
+                  "baseType": "uint8",
+                  "components": null,
+                  "arrayLength": null,
+                  "arrayChildren": null
+                },
+                {
+                  "name": "minor",
+                  "type": "uint8",
+                  "baseType": "uint8",
+                  "components": null,
+                  "arrayLength": null,
+                  "arrayChildren": null
+                },
+                {
+                  "name": "patch",
+                  "type": "uint8",
+                  "baseType": "uint8",
+                  "components": null,
+                  "arrayLength": null,
+                  "arrayChildren": null
+                }
+              ],
+              "arrayLength": null,
+              "arrayChildren": null
+            },
+            {
+              "name": "trex",
+              "type": "tuple",
+              "baseType": "tuple",
+              "indexed": true,
+              "components": [
+                {
+                  "name": "tokenImplementation",
+                  "type": "address",
+                  "baseType": "address",
+                  "components": null,
+                  "arrayLength": null,
+                  "arrayChildren": null
+                },
+                {
+                  "name": "ctrImplementation",
+                  "type": "address",
+                  "baseType": "address",
+                  "components": null,
+                  "arrayLength": null,
+                  "arrayChildren": null
+                },
+                {
+                  "name": "irImplementation",
+                  "type": "address",
+                  "baseType": "address",
+                  "components": null,
+                  "arrayLength": null,
+                  "arrayChildren": null
+                },
+                {
+                  "name": "irsImplementation",
+                  "type": "address",
+                  "baseType": "address",
+                  "components": null,
+                  "arrayLength": null,
+                  "arrayChildren": null
+                },
+                {
+                  "name": "tirImplementation",
+                  "type": "address",
+                  "baseType": "address",
+                  "components": null,
+                  "arrayLength": null,
+                  "arrayChildren": null
+                },
+                {
+                  "name": "mcImplementation",
+                  "type": "address",
+                  "baseType": "address",
+                  "components": null,
+                  "arrayLength": null,
+                  "arrayChildren": null
+                }
+              ],
+              "arrayLength": null,
+              "arrayChildren": null
+            }
+          ],
+          "name": "TREXVersionAdded",
+          "anonymous": false
+        },
+        {
+          "type": "event",
+          "inputs": [
+            {
+              "name": "version",
+              "type": "tuple",
+              "baseType": "tuple",
+              "indexed": true,
+              "components": [
+                {
+                  "name": "major",
+                  "type": "uint8",
+                  "baseType": "uint8",
+                  "components": null,
+                  "arrayLength": null,
+                  "arrayChildren": null
+                },
+                {
+                  "name": "minor",
+                  "type": "uint8",
+                  "baseType": "uint8",
+                  "components": null,
+                  "arrayLength": null,
+                  "arrayChildren": null
+                },
+                {
+                  "name": "patch",
+                  "type": "uint8",
+                  "baseType": "uint8",
+                  "components": null,
+                  "arrayLength": null,
+                  "arrayChildren": null
+                }
+              ],
+              "arrayLength": null,
+              "arrayChildren": null
+            },
+            {
+              "name": "trex",
+              "type": "tuple",
+              "baseType": "tuple",
+              "indexed": true,
+              "components": [
+                {
+                  "name": "tokenImplementation",
+                  "type": "address",
+                  "baseType": "address",
+                  "components": null,
+                  "arrayLength": null,
+                  "arrayChildren": null
+                },
+                {
+                  "name": "ctrImplementation",
+                  "type": "address",
+                  "baseType": "address",
+                  "components": null,
+                  "arrayLength": null,
+                  "arrayChildren": null
+                },
+                {
+                  "name": "irImplementation",
+                  "type": "address",
+                  "baseType": "address",
+                  "components": null,
+                  "arrayLength": null,
+                  "arrayChildren": null
+                },
+                {
+                  "name": "irsImplementation",
+                  "type": "address",
+                  "baseType": "address",
+                  "components": null,
+                  "arrayLength": null,
+                  "arrayChildren": null
+                },
+                {
+                  "name": "tirImplementation",
+                  "type": "address",
+                  "baseType": "address",
+                  "components": null,
+                  "arrayLength": null,
+                  "arrayChildren": null
+                },
+                {
+                  "name": "mcImplementation",
+                  "type": "address",
+                  "baseType": "address",
+                  "components": null,
+                  "arrayLength": null,
+                  "arrayChildren": null
+                }
+              ],
+              "arrayLength": null,
+              "arrayChildren": null
+            }
+          ],
+          "name": "TREXVersionFetched",
+          "anonymous": false
+        },
+        {
+          "type": "event",
+          "inputs": [
+            {
+              "name": "version",
+              "type": "tuple",
+              "baseType": "tuple",
+              "indexed": true,
+              "components": [
+                {
+                  "name": "major",
+                  "type": "uint8",
+                  "baseType": "uint8",
+                  "components": null,
+                  "arrayLength": null,
+                  "arrayChildren": null
+                },
+                {
+                  "name": "minor",
+                  "type": "uint8",
+                  "baseType": "uint8",
+                  "components": null,
+                  "arrayLength": null,
+                  "arrayChildren": null
+                },
+                {
+                  "name": "patch",
+                  "type": "uint8",
+                  "baseType": "uint8",
+                  "components": null,
+                  "arrayLength": null,
+                  "arrayChildren": null
+                }
+              ],
+              "arrayLength": null,
+              "arrayChildren": null
+            }
+          ],
+          "name": "VersionUpdated",
+          "anonymous": false
+        },
+        {
+          "type": "function",
+          "inputs": [
+            {
+              "name": "_version",
+              "type": "tuple",
+              "baseType": "tuple",
+              "components": [
+                {
+                  "name": "major",
+                  "type": "uint8",
+                  "baseType": "uint8",
+                  "components": null,
+                  "arrayLength": null,
+                  "arrayChildren": null
+                },
+                {
+                  "name": "minor",
+                  "type": "uint8",
+                  "baseType": "uint8",
+                  "components": null,
+                  "arrayLength": null,
+                  "arrayChildren": null
+                },
+                {
+                  "name": "patch",
+                  "type": "uint8",
+                  "baseType": "uint8",
+                  "components": null,
+                  "arrayLength": null,
+                  "arrayChildren": null
+                }
+              ],
+              "arrayLength": null,
+              "arrayChildren": null
+            },
+            {
+              "name": "_trex",
+              "type": "tuple",
+              "baseType": "tuple",
+              "components": [
+                {
+                  "name": "tokenImplementation",
+                  "type": "address",
+                  "baseType": "address",
+                  "components": null,
+                  "arrayLength": null,
+                  "arrayChildren": null
+                },
+                {
+                  "name": "ctrImplementation",
+                  "type": "address",
+                  "baseType": "address",
+                  "components": null,
+                  "arrayLength": null,
+                  "arrayChildren": null
+                },
+                {
+                  "name": "irImplementation",
+                  "type": "address",
+                  "baseType": "address",
+                  "components": null,
+                  "arrayLength": null,
+                  "arrayChildren": null
+                },
+                {
+                  "name": "irsImplementation",
+                  "type": "address",
+                  "baseType": "address",
+                  "components": null,
+                  "arrayLength": null,
+                  "arrayChildren": null
+                },
+                {
+                  "name": "tirImplementation",
+                  "type": "address",
+                  "baseType": "address",
+                  "components": null,
+                  "arrayLength": null,
+                  "arrayChildren": null
+                },
+                {
+                  "name": "mcImplementation",
+                  "type": "address",
+                  "baseType": "address",
+                  "components": null,
+                  "arrayLength": null,
+                  "arrayChildren": null
+                }
+              ],
+              "arrayLength": null,
+              "arrayChildren": null
+            }
+          ],
+          "name": "addAndUseTREXVersion",
+          "constant": false,
+          "outputs": [],
+          "stateMutability": "nonpayable",
+          "payable": false,
+          "gas": null
+        },
+        {
+          "type": "function",
+          "inputs": [
+            {
+              "name": "_version",
+              "type": "tuple",
+              "baseType": "tuple",
+              "components": [
+                {
+                  "name": "major",
+                  "type": "uint8",
+                  "baseType": "uint8",
+                  "components": null,
+                  "arrayLength": null,
+                  "arrayChildren": null
+                },
+                {
+                  "name": "minor",
+                  "type": "uint8",
+                  "baseType": "uint8",
+                  "components": null,
+                  "arrayLength": null,
+                  "arrayChildren": null
+                },
+                {
+                  "name": "patch",
+                  "type": "uint8",
+                  "baseType": "uint8",
+                  "components": null,
+                  "arrayLength": null,
+                  "arrayChildren": null
+                }
+              ],
+              "arrayLength": null,
+              "arrayChildren": null
+            },
+            {
+              "name": "_trex",
+              "type": "tuple",
+              "baseType": "tuple",
+              "components": [
+                {
+                  "name": "tokenImplementation",
+                  "type": "address",
+                  "baseType": "address",
+                  "components": null,
+                  "arrayLength": null,
+                  "arrayChildren": null
+                },
+                {
+                  "name": "ctrImplementation",
+                  "type": "address",
+                  "baseType": "address",
+                  "components": null,
+                  "arrayLength": null,
+                  "arrayChildren": null
+                },
+                {
+                  "name": "irImplementation",
+                  "type": "address",
+                  "baseType": "address",
+                  "components": null,
+                  "arrayLength": null,
+                  "arrayChildren": null
+                },
+                {
+                  "name": "irsImplementation",
+                  "type": "address",
+                  "baseType": "address",
+                  "components": null,
+                  "arrayLength": null,
+                  "arrayChildren": null
+                },
+                {
+                  "name": "tirImplementation",
+                  "type": "address",
+                  "baseType": "address",
+                  "components": null,
+                  "arrayLength": null,
+                  "arrayChildren": null
+                },
+                {
+                  "name": "mcImplementation",
+                  "type": "address",
+                  "baseType": "address",
+                  "components": null,
+                  "arrayLength": null,
+                  "arrayChildren": null
+                }
+              ],
+              "arrayLength": null,
+              "arrayChildren": null
+            }
+          ],
+          "name": "addTREXVersion",
+          "constant": false,
+          "outputs": [],
+          "stateMutability": "nonpayable",
+          "payable": false,
+          "gas": null
+        },
+        {
+          "type": "function",
+          "inputs": [
+            {
+              "name": "_token",
+              "type": "address",
+              "baseType": "address",
+              "components": null,
+              "arrayLength": null,
+              "arrayChildren": null
+            },
+            {
+              "name": "_newImplementationAuthority",
+              "type": "address",
+              "baseType": "address",
+              "components": null,
+              "arrayLength": null,
+              "arrayChildren": null
+            }
+          ],
+          "name": "changeImplementationAuthority",
+          "constant": false,
+          "outputs": [],
+          "stateMutability": "nonpayable",
+          "payable": false,
+          "gas": null
+        },
+        {
+          "type": "function",
+          "inputs": [
+            {
+              "name": "_version",
+              "type": "tuple",
+              "baseType": "tuple",
+              "components": [
+                {
+                  "name": "major",
+                  "type": "uint8",
+                  "baseType": "uint8",
+                  "components": null,
+                  "arrayLength": null,
+                  "arrayChildren": null
+                },
+                {
+                  "name": "minor",
+                  "type": "uint8",
+                  "baseType": "uint8",
+                  "components": null,
+                  "arrayLength": null,
+                  "arrayChildren": null
+                },
+                {
+                  "name": "patch",
+                  "type": "uint8",
+                  "baseType": "uint8",
+                  "components": null,
+                  "arrayLength": null,
+                  "arrayChildren": null
+                }
+              ],
+              "arrayLength": null,
+              "arrayChildren": null
+            }
+          ],
+          "name": "fetchVersion",
+          "constant": false,
+          "outputs": [],
+          "stateMutability": "nonpayable",
+          "payable": false,
+          "gas": null
+        },
+        {
+          "type": "function",
+          "inputs": [],
+          "name": "getCTRImplementation",
+          "constant": true,
+          "outputs": [
+            {
+              "name": "",
+              "type": "address",
+              "baseType": "address",
+              "components": null,
+              "arrayLength": null,
+              "arrayChildren": null
+            }
+          ],
+          "stateMutability": "view",
+          "payable": false,
+          "gas": null
+        },
+        {
+          "type": "function",
+          "inputs": [
+            {
+              "name": "_version",
+              "type": "tuple",
+              "baseType": "tuple",
+              "components": [
+                {
+                  "name": "major",
+                  "type": "uint8",
+                  "baseType": "uint8",
+                  "components": null,
+                  "arrayLength": null,
+                  "arrayChildren": null
+                },
+                {
+                  "name": "minor",
+                  "type": "uint8",
+                  "baseType": "uint8",
+                  "components": null,
+                  "arrayLength": null,
+                  "arrayChildren": null
+                },
+                {
+                  "name": "patch",
+                  "type": "uint8",
+                  "baseType": "uint8",
+                  "components": null,
+                  "arrayLength": null,
+                  "arrayChildren": null
+                }
+              ],
+              "arrayLength": null,
+              "arrayChildren": null
+            }
+          ],
+          "name": "getContracts",
+          "constant": true,
+          "outputs": [
+            {
+              "name": "",
+              "type": "tuple",
+              "baseType": "tuple",
+              "components": [
+                {
+                  "name": "tokenImplementation",
+                  "type": "address",
+                  "baseType": "address",
+                  "components": null,
+                  "arrayLength": null,
+                  "arrayChildren": null
+                },
+                {
+                  "name": "ctrImplementation",
+                  "type": "address",
+                  "baseType": "address",
+                  "components": null,
+                  "arrayLength": null,
+                  "arrayChildren": null
+                },
+                {
+                  "name": "irImplementation",
+                  "type": "address",
+                  "baseType": "address",
+                  "components": null,
+                  "arrayLength": null,
+                  "arrayChildren": null
+                },
+                {
+                  "name": "irsImplementation",
+                  "type": "address",
+                  "baseType": "address",
+                  "components": null,
+                  "arrayLength": null,
+                  "arrayChildren": null
+                },
+                {
+                  "name": "tirImplementation",
+                  "type": "address",
+                  "baseType": "address",
+                  "components": null,
+                  "arrayLength": null,
+                  "arrayChildren": null
+                },
+                {
+                  "name": "mcImplementation",
+                  "type": "address",
+                  "baseType": "address",
+                  "components": null,
+                  "arrayLength": null,
+                  "arrayChildren": null
+                }
+              ],
+              "arrayLength": null,
+              "arrayChildren": null
+            }
+          ],
+          "stateMutability": "view",
+          "payable": false,
+          "gas": null
+        },
+        {
+          "type": "function",
+          "inputs": [],
+          "name": "getCurrentVersion",
+          "constant": true,
+          "outputs": [
+            {
+              "name": "",
+              "type": "tuple",
+              "baseType": "tuple",
+              "components": [
+                {
+                  "name": "major",
+                  "type": "uint8",
+                  "baseType": "uint8",
+                  "components": null,
+                  "arrayLength": null,
+                  "arrayChildren": null
+                },
+                {
+                  "name": "minor",
+                  "type": "uint8",
+                  "baseType": "uint8",
+                  "components": null,
+                  "arrayLength": null,
+                  "arrayChildren": null
+                },
+                {
+                  "name": "patch",
+                  "type": "uint8",
+                  "baseType": "uint8",
+                  "components": null,
+                  "arrayLength": null,
+                  "arrayChildren": null
+                }
+              ],
+              "arrayLength": null,
+              "arrayChildren": null
+            }
+          ],
+          "stateMutability": "view",
+          "payable": false,
+          "gas": null
+        },
+        {
+          "type": "function",
+          "inputs": [],
+          "name": "getIRImplementation",
+          "constant": true,
+          "outputs": [
+            {
+              "name": "",
+              "type": "address",
+              "baseType": "address",
+              "components": null,
+              "arrayLength": null,
+              "arrayChildren": null
+            }
+          ],
+          "stateMutability": "view",
+          "payable": false,
+          "gas": null
+        },
+        {
+          "type": "function",
+          "inputs": [],
+          "name": "getIRSImplementation",
+          "constant": true,
+          "outputs": [
+            {
+              "name": "",
+              "type": "address",
+              "baseType": "address",
+              "components": null,
+              "arrayLength": null,
+              "arrayChildren": null
+            }
+          ],
+          "stateMutability": "view",
+          "payable": false,
+          "gas": null
+        },
+        {
+          "type": "function",
+          "inputs": [],
+          "name": "getMCImplementation",
+          "constant": true,
+          "outputs": [
+            {
+              "name": "",
+              "type": "address",
+              "baseType": "address",
+              "components": null,
+              "arrayLength": null,
+              "arrayChildren": null
+            }
+          ],
+          "stateMutability": "view",
+          "payable": false,
+          "gas": null
+        },
+        {
+          "type": "function",
+          "inputs": [],
+          "name": "getReferenceContract",
+          "constant": true,
+          "outputs": [
+            {
+              "name": "",
+              "type": "address",
+              "baseType": "address",
+              "components": null,
+              "arrayLength": null,
+              "arrayChildren": null
+            }
+          ],
+          "stateMutability": "view",
+          "payable": false,
+          "gas": null
+        },
+        {
+          "type": "function",
+          "inputs": [],
+          "name": "getTIRImplementation",
+          "constant": true,
+          "outputs": [
+            {
+              "name": "",
+              "type": "address",
+              "baseType": "address",
+              "components": null,
+              "arrayLength": null,
+              "arrayChildren": null
+            }
+          ],
+          "stateMutability": "view",
+          "payable": false,
+          "gas": null
+        },
+        {
+          "type": "function",
+          "inputs": [],
+          "name": "getTREXFactory",
+          "constant": true,
+          "outputs": [
+            {
+              "name": "",
+              "type": "address",
+              "baseType": "address",
+              "components": null,
+              "arrayLength": null,
+              "arrayChildren": null
+            }
+          ],
+          "stateMutability": "view",
+          "payable": false,
+          "gas": null
+        },
+        {
+          "type": "function",
+          "inputs": [],
+          "name": "getTokenImplementation",
+          "constant": true,
+          "outputs": [
+            {
+              "name": "",
+              "type": "address",
+              "baseType": "address",
+              "components": null,
+              "arrayLength": null,
+              "arrayChildren": null
+            }
+          ],
+          "stateMutability": "view",
+          "payable": false,
+          "gas": null
+        },
+        {
+          "type": "function",
+          "inputs": [],
+          "name": "isReferenceContract",
+          "constant": true,
+          "outputs": [
+            {
+              "name": "",
+              "type": "bool",
+              "baseType": "bool",
+              "components": null,
+              "arrayLength": null,
+              "arrayChildren": null
+            }
+          ],
+          "stateMutability": "view",
+          "payable": false,
+          "gas": null
+        },
+        {
+          "type": "function",
+          "inputs": [],
+          "name": "owner",
+          "constant": true,
+          "outputs": [
+            {
+              "name": "",
+              "type": "address",
+              "baseType": "address",
+              "components": null,
+              "arrayLength": null,
+              "arrayChildren": null
+            }
+          ],
+          "stateMutability": "view",
+          "payable": false,
+          "gas": null
+        },
+        {
+          "type": "function",
+          "inputs": [],
+          "name": "renounceOwnership",
+          "constant": false,
+          "outputs": [],
+          "stateMutability": "nonpayable",
+          "payable": false,
+          "gas": null
+        },
+        {
+          "type": "function",
+          "inputs": [
+            {
+              "name": "iaFactory",
+              "type": "address",
+              "baseType": "address",
+              "components": null,
+              "arrayLength": null,
+              "arrayChildren": null
+            }
+          ],
+          "name": "setIAFactory",
+          "constant": false,
+          "outputs": [],
+          "stateMutability": "nonpayable",
+          "payable": false,
+          "gas": null
+        },
+        {
+          "type": "function",
+          "inputs": [
+            {
+              "name": "trexFactory",
+              "type": "address",
+              "baseType": "address",
+              "components": null,
+              "arrayLength": null,
+              "arrayChildren": null
+            }
+          ],
+          "name": "setTREXFactory",
+          "constant": false,
+          "outputs": [],
+          "stateMutability": "nonpayable",
+          "payable": false,
+          "gas": null
+        },
+        {
+          "type": "function",
+          "inputs": [
+            {
+              "name": "newOwner",
+              "type": "address",
+              "baseType": "address",
+              "components": null,
+              "arrayLength": null,
+              "arrayChildren": null
+            }
+          ],
+          "name": "transferOwnership",
+          "constant": false,
+          "outputs": [],
+          "stateMutability": "nonpayable",
+          "payable": false,
+          "gas": null
+        },
+        {
+          "type": "function",
+          "inputs": [
+            {
+              "name": "_version",
+              "type": "tuple",
+              "baseType": "tuple",
+              "components": [
+                {
+                  "name": "major",
+                  "type": "uint8",
+                  "baseType": "uint8",
+                  "components": null,
+                  "arrayLength": null,
+                  "arrayChildren": null
+                },
+                {
+                  "name": "minor",
+                  "type": "uint8",
+                  "baseType": "uint8",
+                  "components": null,
+                  "arrayLength": null,
+                  "arrayChildren": null
+                },
+                {
+                  "name": "patch",
+                  "type": "uint8",
+                  "baseType": "uint8",
+                  "components": null,
+                  "arrayLength": null,
+                  "arrayChildren": null
+                }
+              ],
+              "arrayLength": null,
+              "arrayChildren": null
+            }
+          ],
+          "name": "useTREXVersion",
+          "constant": false,
+          "outputs": [],
+          "stateMutability": "nonpayable",
+          "payable": false,
+          "gas": null
+        }
+      ],
+      "deploy": {
+        "type": "constructor",
+        "inputs": [
+          {
+            "name": "referenceStatus",
+            "type": "bool",
+            "baseType": "bool",
+            "components": null,
+            "arrayLength": null,
+            "arrayChildren": null
+          },
+          {
+            "name": "trexFactory",
+            "type": "address",
+            "baseType": "address",
+            "components": null,
+            "arrayLength": null,
+            "arrayChildren": null
+          },
+          {
+            "name": "iaFactory",
+            "type": "address",
+            "baseType": "address",
+            "components": null,
+            "arrayLength": null,
+            "arrayChildren": null
+          }
+        ],
+        "payable": false,
+        "gas": null
+      },
+      "fallback": null,
+      "receive": false
+    },
+    "runner": "<SignerWithAddress 0x6EA36aE43E9d34BEf3CCC98cDb50c0E90f26db80>",
+    "filters": {},
+    "fallback": null
+  },
+  "gateway": {
+    "target": "0x5D10d3d8bfc37A9021c2B0b95712510C46D648D1",
+    "interface": {
+      "fragments": [
+        {
+          "type": "constructor",
+          "inputs": [
+            {
+              "name": "idFactoryAddress",
+              "type": "address",
+              "baseType": "address",
+              "components": null,
+              "arrayLength": null,
+              "arrayChildren": null
+            },
+            {
+              "name": "signersToApprove",
+              "type": "address[]",
+              "baseType": "array",
+              "components": null,
+              "arrayLength": -1,
+              "arrayChildren": {
+                "name": "",
+                "type": "address",
+                "baseType": "address",
+                "components": null,
+                "arrayLength": null,
+                "arrayChildren": null
+              }
+            }
+          ],
+          "payable": false,
+          "gas": null
+        },
+        {
+          "type": "error",
+          "inputs": [
+            {
+              "name": "signature",
+              "type": "bytes",
+              "baseType": "bytes",
+              "components": null,
+              "arrayLength": null,
+              "arrayChildren": null
+            }
+          ],
+          "name": "ExpiredSignature"
+        },
+        {
+          "type": "error",
+          "inputs": [
+            {
+              "name": "signature",
+              "type": "bytes",
+              "baseType": "bytes",
+              "components": null,
+              "arrayLength": null,
+              "arrayChildren": null
+            }
+          ],
+          "name": "RevokedSignature"
+        },
+        {
+          "type": "error",
+          "inputs": [
+            {
+              "name": "signature",
+              "type": "bytes",
+              "baseType": "bytes",
+              "components": null,
+              "arrayLength": null,
+              "arrayChildren": null
+            }
+          ],
+          "name": "SignatureAlreadyRevoked"
+        },
+        {
+          "type": "error",
+          "inputs": [
+            {
+              "name": "signature",
+              "type": "bytes",
+              "baseType": "bytes",
+              "components": null,
+              "arrayLength": null,
+              "arrayChildren": null
+            }
+          ],
+          "name": "SignatureNotRevoked"
+        },
+        {
+          "type": "error",
+          "inputs": [
+            {
+              "name": "signer",
+              "type": "address",
+              "baseType": "address",
+              "components": null,
+              "arrayLength": null,
+              "arrayChildren": null
+            }
+          ],
+          "name": "SignerAlreadyApproved"
+        },
+        {
+          "type": "error",
+          "inputs": [
+            {
+              "name": "signer",
+              "type": "address",
+              "baseType": "address",
+              "components": null,
+              "arrayLength": null,
+              "arrayChildren": null
+            }
+          ],
+          "name": "SignerAlreadyNotApproved"
+        },
+        {
+          "type": "error",
+          "inputs": [],
+          "name": "TooManySigners"
+        },
+        {
+          "type": "error",
+          "inputs": [
+            {
+              "name": "signer",
+              "type": "address",
+              "baseType": "address",
+              "components": null,
+              "arrayLength": null,
+              "arrayChildren": null
+            }
+          ],
+          "name": "UnapprovedSigner"
+        },
+        {
+          "type": "error",
+          "inputs": [],
+          "name": "ZeroAddress"
+        },
+        {
+          "type": "event",
+          "inputs": [
+            {
+              "name": "previousOwner",
+              "type": "address",
+              "baseType": "address",
+              "indexed": true,
+              "components": null,
+              "arrayLength": null,
+              "arrayChildren": null
+            },
+            {
+              "name": "newOwner",
+              "type": "address",
+              "baseType": "address",
+              "indexed": true,
+              "components": null,
+              "arrayLength": null,
+              "arrayChildren": null
+            }
+          ],
+          "name": "OwnershipTransferred",
+          "anonymous": false
+        },
+        {
+          "type": "event",
+          "inputs": [
+            {
+              "name": "signature",
+              "type": "bytes",
+              "baseType": "bytes",
+              "indexed": true,
+              "components": null,
+              "arrayLength": null,
+              "arrayChildren": null
+            }
+          ],
+          "name": "SignatureApproved",
+          "anonymous": false
+        },
+        {
+          "type": "event",
+          "inputs": [
+            {
+              "name": "signature",
+              "type": "bytes",
+              "baseType": "bytes",
+              "indexed": true,
+              "components": null,
+              "arrayLength": null,
+              "arrayChildren": null
+            }
+          ],
+          "name": "SignatureRevoked",
+          "anonymous": false
+        },
+        {
+          "type": "event",
+          "inputs": [
+            {
+              "name": "signer",
+              "type": "address",
+              "baseType": "address",
+              "indexed": true,
+              "components": null,
+              "arrayLength": null,
+              "arrayChildren": null
+            }
+          ],
+          "name": "SignerApproved",
+          "anonymous": false
+        },
+        {
+          "type": "event",
+          "inputs": [
+            {
+              "name": "signer",
+              "type": "address",
+              "baseType": "address",
+              "indexed": true,
+              "components": null,
+              "arrayLength": null,
+              "arrayChildren": null
+            }
+          ],
+          "name": "SignerRevoked",
+          "anonymous": false
+        },
+        {
+          "type": "function",
+          "inputs": [
+            {
+              "name": "signature",
+              "type": "bytes",
+              "baseType": "bytes",
+              "components": null,
+              "arrayLength": null,
+              "arrayChildren": null
+            }
+          ],
+          "name": "approveSignature",
+          "constant": false,
+          "outputs": [],
+          "stateMutability": "nonpayable",
+          "payable": false,
+          "gas": null
+        },
+        {
+          "type": "function",
+          "inputs": [
+            {
+              "name": "signer",
+              "type": "address",
+              "baseType": "address",
+              "components": null,
+              "arrayLength": null,
+              "arrayChildren": null
+            }
+          ],
+          "name": "approveSigner",
+          "constant": false,
+          "outputs": [],
+          "stateMutability": "nonpayable",
+          "payable": false,
+          "gas": null
+        },
+        {
+          "type": "function",
+          "inputs": [
+            {
+              "name": "",
+              "type": "address",
+              "baseType": "address",
+              "components": null,
+              "arrayLength": null,
+              "arrayChildren": null
+            }
+          ],
+          "name": "approvedSigners",
+          "constant": true,
+          "outputs": [
+            {
+              "name": "",
+              "type": "bool",
+              "baseType": "bool",
+              "components": null,
+              "arrayLength": null,
+              "arrayChildren": null
+            }
+          ],
+          "stateMutability": "view",
+          "payable": false,
+          "gas": null
+        },
+        {
+          "type": "function",
+          "inputs": [
+            {
+              "name": "data",
+              "type": "bytes",
+              "baseType": "bytes",
+              "components": null,
+              "arrayLength": null,
+              "arrayChildren": null
+            }
+          ],
+          "name": "callFactory",
+          "constant": false,
+          "outputs": [],
+          "stateMutability": "nonpayable",
+          "payable": false,
+          "gas": null
+        },
+        {
+          "type": "function",
+          "inputs": [
+            {
+              "name": "identityOwner",
+              "type": "address",
+              "baseType": "address",
+              "components": null,
+              "arrayLength": null,
+              "arrayChildren": null
+            }
+          ],
+          "name": "deployIdentityForWallet",
+          "constant": false,
+          "outputs": [
+            {
+              "name": "",
+              "type": "address",
+              "baseType": "address",
+              "components": null,
+              "arrayLength": null,
+              "arrayChildren": null
+            }
+          ],
+          "stateMutability": "nonpayable",
+          "payable": false,
+          "gas": null
+        },
+        {
+          "type": "function",
+          "inputs": [
+            {
+              "name": "identityOwner",
+              "type": "address",
+              "baseType": "address",
+              "components": null,
+              "arrayLength": null,
+              "arrayChildren": null
+            },
+            {
+              "name": "salt",
+              "type": "string",
+              "baseType": "string",
+              "components": null,
+              "arrayLength": null,
+              "arrayChildren": null
+            },
+            {
+              "name": "signatureExpiry",
+              "type": "uint256",
+              "baseType": "uint256",
+              "components": null,
+              "arrayLength": null,
+              "arrayChildren": null
+            },
+            {
+              "name": "signature",
+              "type": "bytes",
+              "baseType": "bytes",
+              "components": null,
+              "arrayLength": null,
+              "arrayChildren": null
+            }
+          ],
+          "name": "deployIdentityWithSalt",
+          "constant": false,
+          "outputs": [
+            {
+              "name": "",
+              "type": "address",
+              "baseType": "address",
+              "components": null,
+              "arrayLength": null,
+              "arrayChildren": null
+            }
+          ],
+          "stateMutability": "nonpayable",
+          "payable": false,
+          "gas": null
+        },
+        {
+          "type": "function",
+          "inputs": [
+            {
+              "name": "identityOwner",
+              "type": "address",
+              "baseType": "address",
+              "components": null,
+              "arrayLength": null,
+              "arrayChildren": null
+            },
+            {
+              "name": "salt",
+              "type": "string",
+              "baseType": "string",
+              "components": null,
+              "arrayLength": null,
+              "arrayChildren": null
+            },
+            {
+              "name": "managementKeys",
+              "type": "bytes32[]",
+              "baseType": "array",
+              "components": null,
+              "arrayLength": -1,
+              "arrayChildren": {
+                "name": "",
+                "type": "bytes32",
+                "baseType": "bytes32",
+                "components": null,
+                "arrayLength": null,
+                "arrayChildren": null
+              }
+            },
+            {
+              "name": "signatureExpiry",
+              "type": "uint256",
+              "baseType": "uint256",
+              "components": null,
+              "arrayLength": null,
+              "arrayChildren": null
+            },
+            {
+              "name": "signature",
+              "type": "bytes",
+              "baseType": "bytes",
+              "components": null,
+              "arrayLength": null,
+              "arrayChildren": null
+            }
+          ],
+          "name": "deployIdentityWithSaltAndManagementKeys",
+          "constant": false,
+          "outputs": [
+            {
+              "name": "",
+              "type": "address",
+              "baseType": "address",
+              "components": null,
+              "arrayLength": null,
+              "arrayChildren": null
+            }
+          ],
+          "stateMutability": "nonpayable",
+          "payable": false,
+          "gas": null
+        },
+        {
+          "type": "function",
+          "inputs": [],
+          "name": "idFactory",
+          "constant": true,
+          "outputs": [
+            {
+              "name": "",
+              "type": "address",
+              "baseType": "address",
+              "components": null,
+              "arrayLength": null,
+              "arrayChildren": null
+            }
+          ],
+          "stateMutability": "view",
+          "payable": false,
+          "gas": null
+        },
+        {
+          "type": "function",
+          "inputs": [],
+          "name": "owner",
+          "constant": true,
+          "outputs": [
+            {
+              "name": "",
+              "type": "address",
+              "baseType": "address",
+              "components": null,
+              "arrayLength": null,
+              "arrayChildren": null
+            }
+          ],
+          "stateMutability": "view",
+          "payable": false,
+          "gas": null
+        },
+        {
+          "type": "function",
+          "inputs": [],
+          "name": "renounceOwnership",
+          "constant": false,
+          "outputs": [],
+          "stateMutability": "nonpayable",
+          "payable": false,
+          "gas": null
+        },
+        {
+          "type": "function",
+          "inputs": [
+            {
+              "name": "signature",
+              "type": "bytes",
+              "baseType": "bytes",
+              "components": null,
+              "arrayLength": null,
+              "arrayChildren": null
+            }
+          ],
+          "name": "revokeSignature",
+          "constant": false,
+          "outputs": [],
+          "stateMutability": "nonpayable",
+          "payable": false,
+          "gas": null
+        },
+        {
+          "type": "function",
+          "inputs": [
+            {
+              "name": "signer",
+              "type": "address",
+              "baseType": "address",
+              "components": null,
+              "arrayLength": null,
+              "arrayChildren": null
+            }
+          ],
+          "name": "revokeSigner",
+          "constant": false,
+          "outputs": [],
+          "stateMutability": "nonpayable",
+          "payable": false,
+          "gas": null
+        },
+        {
+          "type": "function",
+          "inputs": [
+            {
+              "name": "",
+              "type": "bytes",
+              "baseType": "bytes",
+              "components": null,
+              "arrayLength": null,
+              "arrayChildren": null
+            }
+          ],
+          "name": "revokedSignatures",
+          "constant": true,
+          "outputs": [
+            {
+              "name": "",
+              "type": "bool",
+              "baseType": "bool",
+              "components": null,
+              "arrayLength": null,
+              "arrayChildren": null
+            }
+          ],
+          "stateMutability": "view",
+          "payable": false,
+          "gas": null
+        },
+        {
+          "type": "function",
+          "inputs": [
+            {
+              "name": "newOwner",
+              "type": "address",
+              "baseType": "address",
+              "components": null,
+              "arrayLength": null,
+              "arrayChildren": null
+            }
+          ],
+          "name": "transferFactoryOwnership",
+          "constant": false,
+          "outputs": [],
+          "stateMutability": "nonpayable",
+          "payable": false,
+          "gas": null
+        },
+        {
+          "type": "function",
+          "inputs": [
+            {
+              "name": "newOwner",
+              "type": "address",
+              "baseType": "address",
+              "components": null,
+              "arrayLength": null,
+              "arrayChildren": null
+            }
+          ],
+          "name": "transferOwnership",
+          "constant": false,
+          "outputs": [],
+          "stateMutability": "nonpayable",
+          "payable": false,
+          "gas": null
+        }
+      ],
+      "deploy": {
+        "type": "constructor",
+        "inputs": [
+          {
+            "name": "idFactoryAddress",
+            "type": "address",
+            "baseType": "address",
+            "components": null,
+            "arrayLength": null,
+            "arrayChildren": null
+          },
+          {
+            "name": "signersToApprove",
+            "type": "address[]",
+            "baseType": "array",
+            "components": null,
+            "arrayLength": -1,
+            "arrayChildren": {
+              "name": "",
+              "type": "address",
+              "baseType": "address",
+              "components": null,
+              "arrayLength": null,
+              "arrayChildren": null
+            }
+          }
+        ],
+        "payable": false,
+        "gas": null
+      },
+      "fallback": null,
+      "receive": false
+    },
+    "runner": "<SignerWithAddress 0x6EA36aE43E9d34BEf3CCC98cDb50c0E90f26db80>",
+    "filters": {},
+    "fallback": null
+  },
+  "claimIssuer": {
+    "target": "0xE2411b687F742b73e1690013E40889a6CbAB646F",
+    "interface": {
+      "fragments": [
+        {
+          "type": "constructor",
+          "inputs": [
+            {
+              "name": "initialManagementKey",
+              "type": "address",
+              "baseType": "address",
+              "components": null,
+              "arrayLength": null,
+              "arrayChildren": null
+            }
+          ],
+          "payable": false,
+          "gas": null
+        },
+        {
+          "type": "event",
+          "inputs": [
+            {
+              "name": "executionId",
+              "type": "uint256",
+              "baseType": "uint256",
+              "indexed": true,
+              "components": null,
+              "arrayLength": null,
+              "arrayChildren": null
+            },
+            {
+              "name": "approved",
+              "type": "bool",
+              "baseType": "bool",
+              "indexed": false,
+              "components": null,
+              "arrayLength": null,
+              "arrayChildren": null
+            }
+          ],
+          "name": "Approved",
+          "anonymous": false
+        },
+        {
+          "type": "event",
+          "inputs": [
+            {
+              "name": "claimId",
+              "type": "bytes32",
+              "baseType": "bytes32",
+              "indexed": true,
+              "components": null,
+              "arrayLength": null,
+              "arrayChildren": null
+            },
+            {
+              "name": "topic",
+              "type": "uint256",
+              "baseType": "uint256",
+              "indexed": true,
+              "components": null,
+              "arrayLength": null,
+              "arrayChildren": null
+            },
+            {
+              "name": "scheme",
+              "type": "uint256",
+              "baseType": "uint256",
+              "indexed": false,
+              "components": null,
+              "arrayLength": null,
+              "arrayChildren": null
+            },
+            {
+              "name": "issuer",
+              "type": "address",
+              "baseType": "address",
+              "indexed": true,
+              "components": null,
+              "arrayLength": null,
+              "arrayChildren": null
+            },
+            {
+              "name": "signature",
+              "type": "bytes",
+              "baseType": "bytes",
+              "indexed": false,
+              "components": null,
+              "arrayLength": null,
+              "arrayChildren": null
+            },
+            {
+              "name": "data",
+              "type": "bytes",
+              "baseType": "bytes",
+              "indexed": false,
+              "components": null,
+              "arrayLength": null,
+              "arrayChildren": null
+            },
+            {
+              "name": "uri",
+              "type": "string",
+              "baseType": "string",
+              "indexed": false,
+              "components": null,
+              "arrayLength": null,
+              "arrayChildren": null
+            }
+          ],
+          "name": "ClaimAdded",
+          "anonymous": false
+        },
+        {
+          "type": "event",
+          "inputs": [
+            {
+              "name": "claimId",
+              "type": "bytes32",
+              "baseType": "bytes32",
+              "indexed": true,
+              "components": null,
+              "arrayLength": null,
+              "arrayChildren": null
+            },
+            {
+              "name": "topic",
+              "type": "uint256",
+              "baseType": "uint256",
+              "indexed": true,
+              "components": null,
+              "arrayLength": null,
+              "arrayChildren": null
+            },
+            {
+              "name": "scheme",
+              "type": "uint256",
+              "baseType": "uint256",
+              "indexed": false,
+              "components": null,
+              "arrayLength": null,
+              "arrayChildren": null
+            },
+            {
+              "name": "issuer",
+              "type": "address",
+              "baseType": "address",
+              "indexed": true,
+              "components": null,
+              "arrayLength": null,
+              "arrayChildren": null
+            },
+            {
+              "name": "signature",
+              "type": "bytes",
+              "baseType": "bytes",
+              "indexed": false,
+              "components": null,
+              "arrayLength": null,
+              "arrayChildren": null
+            },
+            {
+              "name": "data",
+              "type": "bytes",
+              "baseType": "bytes",
+              "indexed": false,
+              "components": null,
+              "arrayLength": null,
+              "arrayChildren": null
+            },
+            {
+              "name": "uri",
+              "type": "string",
+              "baseType": "string",
+              "indexed": false,
+              "components": null,
+              "arrayLength": null,
+              "arrayChildren": null
+            }
+          ],
+          "name": "ClaimChanged",
+          "anonymous": false
+        },
+        {
+          "type": "event",
+          "inputs": [
+            {
+              "name": "claimId",
+              "type": "bytes32",
+              "baseType": "bytes32",
+              "indexed": true,
+              "components": null,
+              "arrayLength": null,
+              "arrayChildren": null
+            },
+            {
+              "name": "topic",
+              "type": "uint256",
+              "baseType": "uint256",
+              "indexed": true,
+              "components": null,
+              "arrayLength": null,
+              "arrayChildren": null
+            },
+            {
+              "name": "scheme",
+              "type": "uint256",
+              "baseType": "uint256",
+              "indexed": false,
+              "components": null,
+              "arrayLength": null,
+              "arrayChildren": null
+            },
+            {
+              "name": "issuer",
+              "type": "address",
+              "baseType": "address",
+              "indexed": true,
+              "components": null,
+              "arrayLength": null,
+              "arrayChildren": null
+            },
+            {
+              "name": "signature",
+              "type": "bytes",
+              "baseType": "bytes",
+              "indexed": false,
+              "components": null,
+              "arrayLength": null,
+              "arrayChildren": null
+            },
+            {
+              "name": "data",
+              "type": "bytes",
+              "baseType": "bytes",
+              "indexed": false,
+              "components": null,
+              "arrayLength": null,
+              "arrayChildren": null
+            },
+            {
+              "name": "uri",
+              "type": "string",
+              "baseType": "string",
+              "indexed": false,
+              "components": null,
+              "arrayLength": null,
+              "arrayChildren": null
+            }
+          ],
+          "name": "ClaimRemoved",
+          "anonymous": false
+        },
+        {
+          "type": "event",
+          "inputs": [
+            {
+              "name": "signature",
+              "type": "bytes",
+              "baseType": "bytes",
+              "indexed": true,
+              "components": null,
+              "arrayLength": null,
+              "arrayChildren": null
+            }
+          ],
+          "name": "ClaimRevoked",
+          "anonymous": false
+        },
+        {
+          "type": "event",
+          "inputs": [
+            {
+              "name": "executionId",
+              "type": "uint256",
+              "baseType": "uint256",
+              "indexed": true,
+              "components": null,
+              "arrayLength": null,
+              "arrayChildren": null
+            },
+            {
+              "name": "to",
+              "type": "address",
+              "baseType": "address",
+              "indexed": true,
+              "components": null,
+              "arrayLength": null,
+              "arrayChildren": null
+            },
+            {
+              "name": "value",
+              "type": "uint256",
+              "baseType": "uint256",
+              "indexed": true,
+              "components": null,
+              "arrayLength": null,
+              "arrayChildren": null
+            },
+            {
+              "name": "data",
+              "type": "bytes",
+              "baseType": "bytes",
+              "indexed": false,
+              "components": null,
+              "arrayLength": null,
+              "arrayChildren": null
+            }
+          ],
+          "name": "Executed",
+          "anonymous": false
+        },
+        {
+          "type": "event",
+          "inputs": [
+            {
+              "name": "executionId",
+              "type": "uint256",
+              "baseType": "uint256",
+              "indexed": true,
+              "components": null,
+              "arrayLength": null,
+              "arrayChildren": null
+            },
+            {
+              "name": "to",
+              "type": "address",
+              "baseType": "address",
+              "indexed": true,
+              "components": null,
+              "arrayLength": null,
+              "arrayChildren": null
+            },
+            {
+              "name": "value",
+              "type": "uint256",
+              "baseType": "uint256",
+              "indexed": true,
+              "components": null,
+              "arrayLength": null,
+              "arrayChildren": null
+            },
+            {
+              "name": "data",
+              "type": "bytes",
+              "baseType": "bytes",
+              "indexed": false,
+              "components": null,
+              "arrayLength": null,
+              "arrayChildren": null
+            }
+          ],
+          "name": "ExecutionFailed",
+          "anonymous": false
+        },
+        {
+          "type": "event",
+          "inputs": [
+            {
+              "name": "executionId",
+              "type": "uint256",
+              "baseType": "uint256",
+              "indexed": true,
+              "components": null,
+              "arrayLength": null,
+              "arrayChildren": null
+            },
+            {
+              "name": "to",
+              "type": "address",
+              "baseType": "address",
+              "indexed": true,
+              "components": null,
+              "arrayLength": null,
+              "arrayChildren": null
+            },
+            {
+              "name": "value",
+              "type": "uint256",
+              "baseType": "uint256",
+              "indexed": true,
+              "components": null,
+              "arrayLength": null,
+              "arrayChildren": null
+            },
+            {
+              "name": "data",
+              "type": "bytes",
+              "baseType": "bytes",
+              "indexed": false,
+              "components": null,
+              "arrayLength": null,
+              "arrayChildren": null
+            }
+          ],
+          "name": "ExecutionRequested",
+          "anonymous": false
+        },
+        {
+          "type": "event",
+          "inputs": [
+            {
+              "name": "key",
+              "type": "bytes32",
+              "baseType": "bytes32",
+              "indexed": true,
+              "components": null,
+              "arrayLength": null,
+              "arrayChildren": null
+            },
+            {
+              "name": "purpose",
+              "type": "uint256",
+              "baseType": "uint256",
+              "indexed": true,
+              "components": null,
+              "arrayLength": null,
+              "arrayChildren": null
+            },
+            {
+              "name": "keyType",
+              "type": "uint256",
+              "baseType": "uint256",
+              "indexed": true,
+              "components": null,
+              "arrayLength": null,
+              "arrayChildren": null
+            }
+          ],
+          "name": "KeyAdded",
+          "anonymous": false
+        },
+        {
+          "type": "event",
+          "inputs": [
+            {
+              "name": "key",
+              "type": "bytes32",
+              "baseType": "bytes32",
+              "indexed": true,
+              "components": null,
+              "arrayLength": null,
+              "arrayChildren": null
+            },
+            {
+              "name": "purpose",
+              "type": "uint256",
+              "baseType": "uint256",
+              "indexed": true,
+              "components": null,
+              "arrayLength": null,
+              "arrayChildren": null
+            },
+            {
+              "name": "keyType",
+              "type": "uint256",
+              "baseType": "uint256",
+              "indexed": true,
+              "components": null,
+              "arrayLength": null,
+              "arrayChildren": null
+            }
+          ],
+          "name": "KeyRemoved",
+          "anonymous": false
+        },
+        {
+          "type": "function",
+          "inputs": [
+            {
+              "name": "_topic",
+              "type": "uint256",
+              "baseType": "uint256",
+              "components": null,
+              "arrayLength": null,
+              "arrayChildren": null
+            },
+            {
+              "name": "_scheme",
+              "type": "uint256",
+              "baseType": "uint256",
+              "components": null,
+              "arrayLength": null,
+              "arrayChildren": null
+            },
+            {
+              "name": "_issuer",
+              "type": "address",
+              "baseType": "address",
+              "components": null,
+              "arrayLength": null,
+              "arrayChildren": null
+            },
+            {
+              "name": "_signature",
+              "type": "bytes",
+              "baseType": "bytes",
+              "components": null,
+              "arrayLength": null,
+              "arrayChildren": null
+            },
+            {
+              "name": "_data",
+              "type": "bytes",
+              "baseType": "bytes",
+              "components": null,
+              "arrayLength": null,
+              "arrayChildren": null
+            },
+            {
+              "name": "_uri",
+              "type": "string",
+              "baseType": "string",
+              "components": null,
+              "arrayLength": null,
+              "arrayChildren": null
+            }
+          ],
+          "name": "addClaim",
+          "constant": false,
+          "outputs": [
+            {
+              "name": "claimRequestId",
+              "type": "bytes32",
+              "baseType": "bytes32",
+              "components": null,
+              "arrayLength": null,
+              "arrayChildren": null
+            }
+          ],
+          "stateMutability": "nonpayable",
+          "payable": false,
+          "gas": null
+        },
+        {
+          "type": "function",
+          "inputs": [
+            {
+              "name": "_key",
+              "type": "bytes32",
+              "baseType": "bytes32",
+              "components": null,
+              "arrayLength": null,
+              "arrayChildren": null
+            },
+            {
+              "name": "_purpose",
+              "type": "uint256",
+              "baseType": "uint256",
+              "components": null,
+              "arrayLength": null,
+              "arrayChildren": null
+            },
+            {
+              "name": "_type",
+              "type": "uint256",
+              "baseType": "uint256",
+              "components": null,
+              "arrayLength": null,
+              "arrayChildren": null
+            }
+          ],
+          "name": "addKey",
+          "constant": false,
+          "outputs": [
+            {
+              "name": "success",
+              "type": "bool",
+              "baseType": "bool",
+              "components": null,
+              "arrayLength": null,
+              "arrayChildren": null
+            }
+          ],
+          "stateMutability": "nonpayable",
+          "payable": false,
+          "gas": null
+        },
+        {
+          "type": "function",
+          "inputs": [
+            {
+              "name": "_id",
+              "type": "uint256",
+              "baseType": "uint256",
+              "components": null,
+              "arrayLength": null,
+              "arrayChildren": null
+            },
+            {
+              "name": "_approve",
+              "type": "bool",
+              "baseType": "bool",
+              "components": null,
+              "arrayLength": null,
+              "arrayChildren": null
+            }
+          ],
+          "name": "approve",
+          "constant": false,
+          "outputs": [
+            {
+              "name": "success",
+              "type": "bool",
+              "baseType": "bool",
+              "components": null,
+              "arrayLength": null,
+              "arrayChildren": null
+            }
+          ],
+          "stateMutability": "nonpayable",
+          "payable": false,
+          "gas": null
+        },
+        {
+          "type": "function",
+          "inputs": [
+            {
+              "name": "_to",
+              "type": "address",
+              "baseType": "address",
+              "components": null,
+              "arrayLength": null,
+              "arrayChildren": null
+            },
+            {
+              "name": "_value",
+              "type": "uint256",
+              "baseType": "uint256",
+              "components": null,
+              "arrayLength": null,
+              "arrayChildren": null
+            },
+            {
+              "name": "_data",
+              "type": "bytes",
+              "baseType": "bytes",
+              "components": null,
+              "arrayLength": null,
+              "arrayChildren": null
+            }
+          ],
+          "name": "execute",
+          "constant": false,
+          "outputs": [
+            {
+              "name": "executionId",
+              "type": "uint256",
+              "baseType": "uint256",
+              "components": null,
+              "arrayLength": null,
+              "arrayChildren": null
+            }
+          ],
+          "stateMutability": "payable",
+          "payable": true,
+          "gas": null
+        },
+        {
+          "type": "function",
+          "inputs": [
+            {
+              "name": "_claimId",
+              "type": "bytes32",
+              "baseType": "bytes32",
+              "components": null,
+              "arrayLength": null,
+              "arrayChildren": null
+            }
+          ],
+          "name": "getClaim",
+          "constant": true,
+          "outputs": [
+            {
+              "name": "topic",
+              "type": "uint256",
+              "baseType": "uint256",
+              "components": null,
+              "arrayLength": null,
+              "arrayChildren": null
+            },
+            {
+              "name": "scheme",
+              "type": "uint256",
+              "baseType": "uint256",
+              "components": null,
+              "arrayLength": null,
+              "arrayChildren": null
+            },
+            {
+              "name": "issuer",
+              "type": "address",
+              "baseType": "address",
+              "components": null,
+              "arrayLength": null,
+              "arrayChildren": null
+            },
+            {
+              "name": "signature",
+              "type": "bytes",
+              "baseType": "bytes",
+              "components": null,
+              "arrayLength": null,
+              "arrayChildren": null
+            },
+            {
+              "name": "data",
+              "type": "bytes",
+              "baseType": "bytes",
+              "components": null,
+              "arrayLength": null,
+              "arrayChildren": null
+            },
+            {
+              "name": "uri",
+              "type": "string",
+              "baseType": "string",
+              "components": null,
+              "arrayLength": null,
+              "arrayChildren": null
+            }
+          ],
+          "stateMutability": "view",
+          "payable": false,
+          "gas": null
+        },
+        {
+          "type": "function",
+          "inputs": [
+            {
+              "name": "_topic",
+              "type": "uint256",
+              "baseType": "uint256",
+              "components": null,
+              "arrayLength": null,
+              "arrayChildren": null
+            }
+          ],
+          "name": "getClaimIdsByTopic",
+          "constant": true,
+          "outputs": [
+            {
+              "name": "claimIds",
+              "type": "bytes32[]",
+              "baseType": "array",
+              "components": null,
+              "arrayLength": -1,
+              "arrayChildren": {
+                "name": "",
+                "type": "bytes32",
+                "baseType": "bytes32",
+                "components": null,
+                "arrayLength": null,
+                "arrayChildren": null
+              }
+            }
+          ],
+          "stateMutability": "view",
+          "payable": false,
+          "gas": null
+        },
+        {
+          "type": "function",
+          "inputs": [
+            {
+              "name": "_key",
+              "type": "bytes32",
+              "baseType": "bytes32",
+              "components": null,
+              "arrayLength": null,
+              "arrayChildren": null
+            }
+          ],
+          "name": "getKey",
+          "constant": true,
+          "outputs": [
+            {
+              "name": "purposes",
+              "type": "uint256[]",
+              "baseType": "array",
+              "components": null,
+              "arrayLength": -1,
+              "arrayChildren": {
+                "name": "",
+                "type": "uint256",
+                "baseType": "uint256",
+                "components": null,
+                "arrayLength": null,
+                "arrayChildren": null
+              }
+            },
+            {
+              "name": "keyType",
+              "type": "uint256",
+              "baseType": "uint256",
+              "components": null,
+              "arrayLength": null,
+              "arrayChildren": null
+            },
+            {
+              "name": "key",
+              "type": "bytes32",
+              "baseType": "bytes32",
+              "components": null,
+              "arrayLength": null,
+              "arrayChildren": null
+            }
+          ],
+          "stateMutability": "view",
+          "payable": false,
+          "gas": null
+        },
+        {
+          "type": "function",
+          "inputs": [
+            {
+              "name": "_key",
+              "type": "bytes32",
+              "baseType": "bytes32",
+              "components": null,
+              "arrayLength": null,
+              "arrayChildren": null
+            }
+          ],
+          "name": "getKeyPurposes",
+          "constant": true,
+          "outputs": [
+            {
+              "name": "_purposes",
+              "type": "uint256[]",
+              "baseType": "array",
+              "components": null,
+              "arrayLength": -1,
+              "arrayChildren": {
+                "name": "",
+                "type": "uint256",
+                "baseType": "uint256",
+                "components": null,
+                "arrayLength": null,
+                "arrayChildren": null
+              }
+            }
+          ],
+          "stateMutability": "view",
+          "payable": false,
+          "gas": null
+        },
+        {
+          "type": "function",
+          "inputs": [
+            {
+              "name": "_purpose",
+              "type": "uint256",
+              "baseType": "uint256",
+              "components": null,
+              "arrayLength": null,
+              "arrayChildren": null
+            }
+          ],
+          "name": "getKeysByPurpose",
+          "constant": true,
+          "outputs": [
+            {
+              "name": "keys",
+              "type": "bytes32[]",
+              "baseType": "array",
+              "components": null,
+              "arrayLength": -1,
+              "arrayChildren": {
+                "name": "",
+                "type": "bytes32",
+                "baseType": "bytes32",
+                "components": null,
+                "arrayLength": null,
+                "arrayChildren": null
+              }
+            }
+          ],
+          "stateMutability": "view",
+          "payable": false,
+          "gas": null
+        },
+        {
+          "type": "function",
+          "inputs": [
+            {
+              "name": "sig",
+              "type": "bytes",
+              "baseType": "bytes",
+              "components": null,
+              "arrayLength": null,
+              "arrayChildren": null
+            },
+            {
+              "name": "dataHash",
+              "type": "bytes32",
+              "baseType": "bytes32",
+              "components": null,
+              "arrayLength": null,
+              "arrayChildren": null
+            }
+          ],
+          "name": "getRecoveredAddress",
+          "constant": true,
+          "outputs": [
+            {
+              "name": "addr",
+              "type": "address",
+              "baseType": "address",
+              "components": null,
+              "arrayLength": null,
+              "arrayChildren": null
+            }
+          ],
+          "stateMutability": "pure",
+          "payable": false,
+          "gas": null
+        },
+        {
+          "type": "function",
+          "inputs": [
+            {
+              "name": "initialManagementKey",
+              "type": "address",
+              "baseType": "address",
+              "components": null,
+              "arrayLength": null,
+              "arrayChildren": null
+            }
+          ],
+          "name": "initialize",
+          "constant": false,
+          "outputs": [],
+          "stateMutability": "nonpayable",
+          "payable": false,
+          "gas": null
+        },
+        {
+          "type": "function",
+          "inputs": [
+            {
+              "name": "_sig",
+              "type": "bytes",
+              "baseType": "bytes",
+              "components": null,
+              "arrayLength": null,
+              "arrayChildren": null
+            }
+          ],
+          "name": "isClaimRevoked",
+          "constant": true,
+          "outputs": [
+            {
+              "name": "",
+              "type": "bool",
+              "baseType": "bool",
+              "components": null,
+              "arrayLength": null,
+              "arrayChildren": null
+            }
+          ],
+          "stateMutability": "view",
+          "payable": false,
+          "gas": null
+        },
+        {
+          "type": "function",
+          "inputs": [
+            {
+              "name": "_identity",
+              "type": "address",
+              "baseType": "address",
+              "components": null,
+              "arrayLength": null,
+              "arrayChildren": null
+            },
+            {
+              "name": "claimTopic",
+              "type": "uint256",
+              "baseType": "uint256",
+              "components": null,
+              "arrayLength": null,
+              "arrayChildren": null
+            },
+            {
+              "name": "sig",
+              "type": "bytes",
+              "baseType": "bytes",
+              "components": null,
+              "arrayLength": null,
+              "arrayChildren": null
+            },
+            {
+              "name": "data",
+              "type": "bytes",
+              "baseType": "bytes",
+              "components": null,
+              "arrayLength": null,
+              "arrayChildren": null
+            }
+          ],
+          "name": "isClaimValid",
+          "constant": true,
+          "outputs": [
+            {
+              "name": "claimValid",
+              "type": "bool",
+              "baseType": "bool",
+              "components": null,
+              "arrayLength": null,
+              "arrayChildren": null
+            }
+          ],
+          "stateMutability": "view",
+          "payable": false,
+          "gas": null
+        },
+        {
+          "type": "function",
+          "inputs": [
+            {
+              "name": "_key",
+              "type": "bytes32",
+              "baseType": "bytes32",
+              "components": null,
+              "arrayLength": null,
+              "arrayChildren": null
+            },
+            {
+              "name": "_purpose",
+              "type": "uint256",
+              "baseType": "uint256",
+              "components": null,
+              "arrayLength": null,
+              "arrayChildren": null
+            }
+          ],
+          "name": "keyHasPurpose",
+          "constant": true,
+          "outputs": [
+            {
+              "name": "result",
+              "type": "bool",
+              "baseType": "bool",
+              "components": null,
+              "arrayLength": null,
+              "arrayChildren": null
+            }
+          ],
+          "stateMutability": "view",
+          "payable": false,
+          "gas": null
+        },
+        {
+          "type": "function",
+          "inputs": [
+            {
+              "name": "_claimId",
+              "type": "bytes32",
+              "baseType": "bytes32",
+              "components": null,
+              "arrayLength": null,
+              "arrayChildren": null
+            }
+          ],
+          "name": "removeClaim",
+          "constant": false,
+          "outputs": [
+            {
+              "name": "success",
+              "type": "bool",
+              "baseType": "bool",
+              "components": null,
+              "arrayLength": null,
+              "arrayChildren": null
+            }
+          ],
+          "stateMutability": "nonpayable",
+          "payable": false,
+          "gas": null
+        },
+        {
+          "type": "function",
+          "inputs": [
+            {
+              "name": "_key",
+              "type": "bytes32",
+              "baseType": "bytes32",
+              "components": null,
+              "arrayLength": null,
+              "arrayChildren": null
+            },
+            {
+              "name": "_purpose",
+              "type": "uint256",
+              "baseType": "uint256",
+              "components": null,
+              "arrayLength": null,
+              "arrayChildren": null
+            }
+          ],
+          "name": "removeKey",
+          "constant": false,
+          "outputs": [
+            {
+              "name": "success",
+              "type": "bool",
+              "baseType": "bool",
+              "components": null,
+              "arrayLength": null,
+              "arrayChildren": null
+            }
+          ],
+          "stateMutability": "nonpayable",
+          "payable": false,
+          "gas": null
+        },
+        {
+          "type": "function",
+          "inputs": [
+            {
+              "name": "_claimId",
+              "type": "bytes32",
+              "baseType": "bytes32",
+              "components": null,
+              "arrayLength": null,
+              "arrayChildren": null
+            },
+            {
+              "name": "_identity",
+              "type": "address",
+              "baseType": "address",
+              "components": null,
+              "arrayLength": null,
+              "arrayChildren": null
+            }
+          ],
+          "name": "revokeClaim",
+          "constant": false,
+          "outputs": [
+            {
+              "name": "",
+              "type": "bool",
+              "baseType": "bool",
+              "components": null,
+              "arrayLength": null,
+              "arrayChildren": null
+            }
+          ],
+          "stateMutability": "nonpayable",
+          "payable": false,
+          "gas": null
+        },
+        {
+          "type": "function",
+          "inputs": [
+            {
+              "name": "signature",
+              "type": "bytes",
+              "baseType": "bytes",
+              "components": null,
+              "arrayLength": null,
+              "arrayChildren": null
+            }
+          ],
+          "name": "revokeClaimBySignature",
+          "constant": false,
+          "outputs": [],
+          "stateMutability": "nonpayable",
+          "payable": false,
+          "gas": null
+        },
+        {
+          "type": "function",
+          "inputs": [
+            {
+              "name": "",
+              "type": "bytes",
+              "baseType": "bytes",
+              "components": null,
+              "arrayLength": null,
+              "arrayChildren": null
+            }
+          ],
+          "name": "revokedClaims",
+          "constant": true,
+          "outputs": [
+            {
+              "name": "",
+              "type": "bool",
+              "baseType": "bool",
+              "components": null,
+              "arrayLength": null,
+              "arrayChildren": null
+            }
+          ],
+          "stateMutability": "view",
+          "payable": false,
+          "gas": null
+        },
+        {
+          "type": "function",
+          "inputs": [],
+          "name": "version",
+          "constant": true,
+          "outputs": [
+            {
+              "name": "",
+              "type": "string",
+              "baseType": "string",
+              "components": null,
+              "arrayLength": null,
+              "arrayChildren": null
+            }
+          ],
+          "stateMutability": "pure",
+          "payable": false,
+          "gas": null
+        }
+      ],
+      "deploy": {
+        "type": "constructor",
+        "inputs": [
+          {
+            "name": "initialManagementKey",
+            "type": "address",
+            "baseType": "address",
+            "components": null,
+            "arrayLength": null,
+            "arrayChildren": null
+          }
+        ],
+        "payable": false,
+        "gas": null
+      },
+      "fallback": null,
+      "receive": false
+    },
+    "runner": "<SignerWithAddress 0x6EA36aE43E9d34BEf3CCC98cDb50c0E90f26db80>",
+    "filters": {},
+    "fallback": null
+  },
+  "trexFactory": {
+    "target": "0x17374C54ecA3c889549B9eFE09C8942c626C34CB",
+    "interface": {
+      "fragments": [
+        {
+          "type": "constructor",
+          "inputs": [
+            {
+              "name": "implementationAuthority_",
+              "type": "address",
+              "baseType": "address",
+              "components": null,
+              "arrayLength": null,
+              "arrayChildren": null
+            },
+            {
+              "name": "idFactory_",
+              "type": "address",
+              "baseType": "address",
+              "components": null,
+              "arrayLength": null,
+              "arrayChildren": null
+            }
+          ],
+          "payable": false,
+          "gas": null
+        },
+        {
+          "type": "event",
+          "inputs": [
+            {
+              "name": "_addr",
+              "type": "address",
+              "baseType": "address",
+              "indexed": true,
+              "components": null,
+              "arrayLength": null,
+              "arrayChildren": null
+            }
+          ],
+          "name": "Deployed",
+          "anonymous": false
+        },
+        {
+          "type": "event",
+          "inputs": [
+            {
+              "name": "_idFactory",
+              "type": "address",
+              "baseType": "address",
+              "indexed": false,
+              "components": null,
+              "arrayLength": null,
+              "arrayChildren": null
+            }
+          ],
+          "name": "IdFactorySet",
+          "anonymous": false
+        },
+        {
+          "type": "event",
+          "inputs": [
+            {
+              "name": "_implementationAuthority",
+              "type": "address",
+              "baseType": "address",
+              "indexed": false,
+              "components": null,
+              "arrayLength": null,
+              "arrayChildren": null
+            }
+          ],
+          "name": "ImplementationAuthoritySet",
+          "anonymous": false
+        },
+        {
+          "type": "event",
+          "inputs": [
+            {
+              "name": "previousOwner",
+              "type": "address",
+              "baseType": "address",
+              "indexed": true,
+              "components": null,
+              "arrayLength": null,
+              "arrayChildren": null
+            },
+            {
+              "name": "newOwner",
+              "type": "address",
+              "baseType": "address",
+              "indexed": true,
+              "components": null,
+              "arrayLength": null,
+              "arrayChildren": null
+            }
+          ],
+          "name": "OwnershipTransferred",
+          "anonymous": false
+        },
+        {
+          "type": "event",
+          "inputs": [
+            {
+              "name": "_token",
+              "type": "address",
+              "baseType": "address",
+              "indexed": true,
+              "components": null,
+              "arrayLength": null,
+              "arrayChildren": null
+            },
+            {
+              "name": "_ir",
+              "type": "address",
+              "baseType": "address",
+              "indexed": false,
+              "components": null,
+              "arrayLength": null,
+              "arrayChildren": null
+            },
+            {
+              "name": "_irs",
+              "type": "address",
+              "baseType": "address",
+              "indexed": false,
+              "components": null,
+              "arrayLength": null,
+              "arrayChildren": null
+            },
+            {
+              "name": "_tir",
+              "type": "address",
+              "baseType": "address",
+              "indexed": false,
+              "components": null,
+              "arrayLength": null,
+              "arrayChildren": null
+            },
+            {
+              "name": "_ctr",
+              "type": "address",
+              "baseType": "address",
+              "indexed": false,
+              "components": null,
+              "arrayLength": null,
+              "arrayChildren": null
+            },
+            {
+              "name": "_mc",
+              "type": "address",
+              "baseType": "address",
+              "indexed": false,
+              "components": null,
+              "arrayLength": null,
+              "arrayChildren": null
+            },
+            {
+              "name": "_salt",
+              "type": "string",
+              "baseType": "string",
+              "indexed": true,
+              "components": null,
+              "arrayLength": null,
+              "arrayChildren": null
+            }
+          ],
+          "name": "TREXSuiteDeployed",
+          "anonymous": false
+        },
+        {
+          "type": "function",
+          "inputs": [
+            {
+              "name": "_salt",
+              "type": "string",
+              "baseType": "string",
+              "components": null,
+              "arrayLength": null,
+              "arrayChildren": null
+            },
+            {
+              "name": "_tokenDetails",
+              "type": "tuple",
+              "baseType": "tuple",
+              "components": [
+                {
+                  "name": "owner",
+                  "type": "address",
+                  "baseType": "address",
+                  "components": null,
+                  "arrayLength": null,
+                  "arrayChildren": null
+                },
+                {
+                  "name": "name",
+                  "type": "string",
+                  "baseType": "string",
+                  "components": null,
+                  "arrayLength": null,
+                  "arrayChildren": null
+                },
+                {
+                  "name": "symbol",
+                  "type": "string",
+                  "baseType": "string",
+                  "components": null,
+                  "arrayLength": null,
+                  "arrayChildren": null
+                },
+                {
+                  "name": "decimals",
+                  "type": "uint8",
+                  "baseType": "uint8",
+                  "components": null,
+                  "arrayLength": null,
+                  "arrayChildren": null
+                },
+                {
+                  "name": "irs",
+                  "type": "address",
+                  "baseType": "address",
+                  "components": null,
+                  "arrayLength": null,
+                  "arrayChildren": null
+                },
+                {
+                  "name": "ONCHAINID",
+                  "type": "address",
+                  "baseType": "address",
+                  "components": null,
+                  "arrayLength": null,
+                  "arrayChildren": null
+                },
+                {
+                  "name": "irAgents",
+                  "type": "address[]",
+                  "baseType": "array",
+                  "components": null,
+                  "arrayLength": -1,
+                  "arrayChildren": {
+                    "name": "",
+                    "type": "address",
+                    "baseType": "address",
+                    "components": null,
+                    "arrayLength": null,
+                    "arrayChildren": null
+                  }
+                },
+                {
+                  "name": "tokenAgents",
+                  "type": "address[]",
+                  "baseType": "array",
+                  "components": null,
+                  "arrayLength": -1,
+                  "arrayChildren": {
+                    "name": "",
+                    "type": "address",
+                    "baseType": "address",
+                    "components": null,
+                    "arrayLength": null,
+                    "arrayChildren": null
+                  }
+                },
+                {
+                  "name": "complianceModules",
+                  "type": "address[]",
+                  "baseType": "array",
+                  "components": null,
+                  "arrayLength": -1,
+                  "arrayChildren": {
+                    "name": "",
+                    "type": "address",
+                    "baseType": "address",
+                    "components": null,
+                    "arrayLength": null,
+                    "arrayChildren": null
+                  }
+                },
+                {
+                  "name": "complianceSettings",
+                  "type": "bytes[]",
+                  "baseType": "array",
+                  "components": null,
+                  "arrayLength": -1,
+                  "arrayChildren": {
+                    "name": "",
+                    "type": "bytes",
+                    "baseType": "bytes",
+                    "components": null,
+                    "arrayLength": null,
+                    "arrayChildren": null
+                  }
+                },
+                {
+                  "name": "lockContract",
+                  "type": "address",
+                  "baseType": "address",
+                  "components": null,
+                  "arrayLength": null,
+                  "arrayChildren": null
+                }
+              ],
+              "arrayLength": null,
+              "arrayChildren": null
+            },
+            {
+              "name": "_claimDetails",
+              "type": "tuple",
+              "baseType": "tuple",
+              "components": [
+                {
+                  "name": "claimTopics",
+                  "type": "uint256[]",
+                  "baseType": "array",
+                  "components": null,
+                  "arrayLength": -1,
+                  "arrayChildren": {
+                    "name": "",
+                    "type": "uint256",
+                    "baseType": "uint256",
+                    "components": null,
+                    "arrayLength": null,
+                    "arrayChildren": null
+                  }
+                },
+                {
+                  "name": "issuers",
+                  "type": "address[]",
+                  "baseType": "array",
+                  "components": null,
+                  "arrayLength": -1,
+                  "arrayChildren": {
+                    "name": "",
+                    "type": "address",
+                    "baseType": "address",
+                    "components": null,
+                    "arrayLength": null,
+                    "arrayChildren": null
+                  }
+                },
+                {
+                  "name": "issuerClaims",
+                  "type": "uint256[][]",
+                  "baseType": "array",
+                  "components": null,
+                  "arrayLength": -1,
+                  "arrayChildren": {
+                    "name": "",
+                    "type": "uint256[]",
+                    "baseType": "array",
+                    "components": null,
+                    "arrayLength": -1,
+                    "arrayChildren": {
+                      "name": "",
+                      "type": "uint256",
+                      "baseType": "uint256",
+                      "components": null,
+                      "arrayLength": null,
+                      "arrayChildren": null
+                    }
+                  }
+                }
+              ],
+              "arrayLength": null,
+              "arrayChildren": null
+            }
+          ],
+          "name": "deployTREXSuite",
+          "constant": false,
+          "outputs": [],
+          "stateMutability": "nonpayable",
+          "payable": false,
+          "gas": null
+        },
+        {
+          "type": "function",
+          "inputs": [],
+          "name": "getIdFactory",
+          "constant": true,
+          "outputs": [
+            {
+              "name": "",
+              "type": "address",
+              "baseType": "address",
+              "components": null,
+              "arrayLength": null,
+              "arrayChildren": null
+            }
+          ],
+          "stateMutability": "view",
+          "payable": false,
+          "gas": null
+        },
+        {
+          "type": "function",
+          "inputs": [],
+          "name": "getImplementationAuthority",
+          "constant": true,
+          "outputs": [
+            {
+              "name": "",
+              "type": "address",
+              "baseType": "address",
+              "components": null,
+              "arrayLength": null,
+              "arrayChildren": null
+            }
+          ],
+          "stateMutability": "view",
+          "payable": false,
+          "gas": null
+        },
+        {
+          "type": "function",
+          "inputs": [
+            {
+              "name": "_salt",
+              "type": "string",
+              "baseType": "string",
+              "components": null,
+              "arrayLength": null,
+              "arrayChildren": null
+            }
+          ],
+          "name": "getToken",
+          "constant": true,
+          "outputs": [
+            {
+              "name": "",
+              "type": "address",
+              "baseType": "address",
+              "components": null,
+              "arrayLength": null,
+              "arrayChildren": null
+            }
+          ],
+          "stateMutability": "view",
+          "payable": false,
+          "gas": null
+        },
+        {
+          "type": "function",
+          "inputs": [],
+          "name": "owner",
+          "constant": true,
+          "outputs": [
+            {
+              "name": "",
+              "type": "address",
+              "baseType": "address",
+              "components": null,
+              "arrayLength": null,
+              "arrayChildren": null
+            }
+          ],
+          "stateMutability": "view",
+          "payable": false,
+          "gas": null
+        },
+        {
+          "type": "function",
+          "inputs": [
+            {
+              "name": "_contract",
+              "type": "address",
+              "baseType": "address",
+              "components": null,
+              "arrayLength": null,
+              "arrayChildren": null
+            },
+            {
+              "name": "_newOwner",
+              "type": "address",
+              "baseType": "address",
+              "components": null,
+              "arrayLength": null,
+              "arrayChildren": null
+            }
+          ],
+          "name": "recoverContractOwnership",
+          "constant": false,
+          "outputs": [],
+          "stateMutability": "nonpayable",
+          "payable": false,
+          "gas": null
+        },
+        {
+          "type": "function",
+          "inputs": [],
+          "name": "renounceOwnership",
+          "constant": false,
+          "outputs": [],
+          "stateMutability": "nonpayable",
+          "payable": false,
+          "gas": null
+        },
+        {
+          "type": "function",
+          "inputs": [
+            {
+              "name": "idFactory_",
+              "type": "address",
+              "baseType": "address",
+              "components": null,
+              "arrayLength": null,
+              "arrayChildren": null
+            }
+          ],
+          "name": "setIdFactory",
+          "constant": false,
+          "outputs": [],
+          "stateMutability": "nonpayable",
+          "payable": false,
+          "gas": null
+        },
+        {
+          "type": "function",
+          "inputs": [
+            {
+              "name": "implementationAuthority_",
+              "type": "address",
+              "baseType": "address",
+              "components": null,
+              "arrayLength": null,
+              "arrayChildren": null
+            }
+          ],
+          "name": "setImplementationAuthority",
+          "constant": false,
+          "outputs": [],
+          "stateMutability": "nonpayable",
+          "payable": false,
+          "gas": null
+        },
+        {
+          "type": "function",
+          "inputs": [
+            {
+              "name": "",
+              "type": "string",
+              "baseType": "string",
+              "components": null,
+              "arrayLength": null,
+              "arrayChildren": null
+            }
+          ],
+          "name": "tokenDeployed",
+          "constant": true,
+          "outputs": [
+            {
+              "name": "",
+              "type": "address",
+              "baseType": "address",
+              "components": null,
+              "arrayLength": null,
+              "arrayChildren": null
+            }
+          ],
+          "stateMutability": "view",
+          "payable": false,
+          "gas": null
+        },
+        {
+          "type": "function",
+          "inputs": [
+            {
+              "name": "newOwner",
+              "type": "address",
+              "baseType": "address",
+              "components": null,
+              "arrayLength": null,
+              "arrayChildren": null
+            }
+          ],
+          "name": "transferOwnership",
+          "constant": false,
+          "outputs": [],
+          "stateMutability": "nonpayable",
+          "payable": false,
+          "gas": null
+        }
+      ],
+      "deploy": {
+        "type": "constructor",
+        "inputs": [
+          {
+            "name": "implementationAuthority_",
+            "type": "address",
+            "baseType": "address",
+            "components": null,
+            "arrayLength": null,
+            "arrayChildren": null
+          },
+          {
+            "name": "idFactory_",
+            "type": "address",
+            "baseType": "address",
+            "components": null,
+            "arrayLength": null,
+            "arrayChildren": null
+          }
+        ],
+        "payable": false,
+        "gas": null
+      },
+      "fallback": null,
+      "receive": false
+    },
+    "runner": "<SignerWithAddress 0x6EA36aE43E9d34BEf3CCC98cDb50c0E90f26db80>",
+    "filters": {},
+    "fallback": null
+  }
+}

@@ -1,0 +1,56 @@
+{
+  "_format": "hh-sol-artifact-1",
+  "contractName": "FileStorage",
+  "sourceName": "contracts/config/FileStorage.sol",
+  "abi": [
+    {
+      "anonymous": false,
+      "inputs": [
+        {
+          "indexed": true,
+          "internalType": "address",
+          "name": "user",
+          "type": "address"
+        },
+        {
+          "indexed": false,
+          "internalType": "bytes32",
+          "name": "fileHash",
+          "type": "bytes32"
+        }
+      ],
+      "name": "FileStored",
+      "type": "event"
+    },
+    {
+      "inputs": [],
+      "name": "getFileHash",
+      "outputs": [
+        {
+          "internalType": "bytes32",
+          "name": "",
+          "type": "bytes32"
+        }
+      ],
+      "stateMutability": "view",
+      "type": "function"
+    },
+    {
+      "inputs": [
+        {
+          "internalType": "bytes32",
+          "name": "_fileHash",
+          "type": "bytes32"
+        }
+      ],
+      "name": "storeFileHash",
+      "outputs": [],
+      "stateMutability": "nonpayable",
+      "type": "function"
+    }
+  ],
+  "bytecode": "0x608080604052346100155760e0908161001b8239f35b600080fdfe6080806040526004361015601257600080fd5b600090813560e01c9081638493f71f146085575063cf4df59e14603457600080fd5b346082576020366003190112608257600435338252816020528060408320556040519081527f3c46079f9cd648b7312f41c1ecf040423a99aa48b9892bcebd68aa199d5344d860203392a280f35b80fd5b90503460a6578160031936011260a657604060209233815280845220548152f35b5080fdfea2646970667358221220be352de64d2123c53b3082d5ff4e828f13bef1387f5615df519ebb33f265b96a64736f6c63430008140033",
+  "deployedBytecode": "0x6080806040526004361015601257600080fd5b600090813560e01c9081638493f71f146085575063cf4df59e14603457600080fd5b346082576020366003190112608257600435338252816020528060408320556040519081527f3c46079f9cd648b7312f41c1ecf040423a99aa48b9892bcebd68aa199d5344d860203392a280f35b80fd5b90503460a6578160031936011260a657604060209233815280845220548152f35b5080fdfea2646970667358221220be352de64d2123c53b3082d5ff4e828f13bef1387f5615df519ebb33f265b96a64736f6c63430008140033",
+  "linkReferences": {},
+  "deployedLinkReferences": {}
+}

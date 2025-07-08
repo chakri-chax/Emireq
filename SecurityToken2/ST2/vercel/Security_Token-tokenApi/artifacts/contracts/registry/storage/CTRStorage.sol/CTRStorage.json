@@ -1,0 +1,10 @@
+{
+  "_format": "hh-sol-artifact-1",
+  "contractName": "CTRStorage",
+  "sourceName": "contracts/registry/storage/CTRStorage.sol",
+  "abi": [],
+  "bytecode": "0x60808060405234601357603a908160198239f35b600080fdfe600080fdfea2646970667358221220b80b706776873eabc75dc17b6469c15258bc6bfec6c6f4fdb23347b17d8c381964736f6c63430008110033",
+  "deployedBytecode": "0x600080fdfea2646970667358221220b80b706776873eabc75dc17b6469c15258bc6bfec6c6f4fdb23347b17d8c381964736f6c63430008110033",
+  "linkReferences": {},
+  "deployedLinkReferences": {}
+}
