@@ -1,13 +1,66 @@
 import { AssetIcon } from '../components/AssetIcon';
 import { MarketData } from '../lib/supabase';
+import { getUserTokenBalance } from '../hooks/balances';
+import { useMetaMask } from '../hooks/useMetaMask';
+import { useState, useEffect } from 'react';
 
 interface FaucetProps {
   assets: MarketData[];
-  onClaim: (symbol: string) => void;
-    isConnected?: boolean;
+  onClaim: (address: string, symbol: string) => void;
+  isConnected?: boolean;
+}
+
+interface BalanceMap {
+  [symbol: string]: string;
 }
 
 export function Faucet({ assets, onClaim }: FaucetProps) {
+  const { connectedAddress } = useMetaMask();
+  const [balances, setBalances] = useState<BalanceMap>({});
+  const [loading, setLoading] = useState<boolean>(false);
+
+  // Fetch balances when connectedAddress or assets change
+  useEffect(() => {
+    const fetchBalances = async () => {
+      if (!connectedAddress || assets.length === 0) return;
+      
+      setLoading(true);
+      const newBalances: BalanceMap = {};
+      
+      try {
+        for (const asset of assets) {
+          if(asset.address === '0x0000000000000000000000000000000000000000') {
+            newBalances[asset.asset_symbol] = '0';
+          }else{
+           const balance = await getUserTokenBalance(connectedAddress, asset.address);
+          newBalances[asset.asset_symbol] = balance.toString();
+          }
+         
+        }
+        setBalances(newBalances);
+      } catch (error) {
+        console.error('Error fetching balances:', error);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchBalances();
+  }, [connectedAddress, assets]);
+
+  // Refresh balances after a claim
+  const handleClaim = async (address: string, symbol: string) => {
+    await onClaim(address, symbol);
+    // Refresh the balance for the claimed token
+    if (connectedAddress) {
+      const newBalance = await getUserTokenBalance(connectedAddress, address);
+      setBalances(prev => ({
+        ...prev,
+        [symbol]: newBalance.toString()
+      }));
+    }
+  };
+
   return (
     <div className="min-h-screen bg-[#16191f]">
       <div className="max-w-[1800px] mx-auto p-6">
@@ -48,11 +101,17 @@ export function Faucet({ assets, onClaim }: FaucetProps) {
                       </div>
                     </td>
                     <td className="px-6 py-5 text-right">
-                      <div className="text-white font-medium">0</div>
+                      <div className="text-white font-medium">
+                        {loading ? (
+                          <span className="text-gray-400">Loading...</span>
+                        ) : (
+                          balances[asset.asset_symbol] || '0'
+                        )}
+                      </div>
                     </td>
                     <td className="px-6 py-5 text-right">
                       <button
-                        onClick={() => onClaim(asset.asset_symbol)}
+                        onClick={() => handleClaim(asset.address, asset.asset_symbol)}
                         className="px-4 py-2 bg-white hover:bg-gray-100 text-gray-900 font-medium text-sm rounded-lg transition-colors"
                       >
                         Faucet

@@ -7,6 +7,7 @@ export const supabase = createClient(supabaseUrl, supabaseAnonKey);
 
 export interface MarketData {
   id: string;
+  address: string;
   asset_symbol: string;
   asset_name: string;
   supply_apy: number;

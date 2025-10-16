@@ -5,14 +5,20 @@ import { Dashboard } from './pages/Dashboard';
 import { Faucet } from './pages/Faucet';
 import { dummyMarketData } from './lib/dummyData.ts';
 import { supabase, MarketData, UserPosition } from './lib/supabase';
+import { ethers } from 'ethers';
+// import ERC20ABI from "../backend/artifacts/@openzeppelin/contracts/token/ERC20/ERC20.sol/ERC20.json";
+import ERC20ABI from "../backend/artifacts/contracts/mocks/MockERC20.sol/MockERC20.json";
 // @ts-ignore
 import { useMetaMask } from './hooks/useMetaMask';
+import deployment from "../backend/deployment.json"
+import { toast } from 'react-toastify';
 function App() {
   const [currentPage, setCurrentPage] = useState<'dashboard' | 'faucet'>('dashboard');
   const [marketData, setMarketData] = useState<MarketData[]>([]);
   const [userPositions, setUserPositions] = useState<UserPosition[]>([]);
   const [loading, setLoading] = useState(false);
   const [showHeader, setShowHeader] = useState(true);
+
 
   // Use the MetaMask hook
   const {
@@ -31,7 +37,7 @@ function App() {
 
   const handleScroll = useCallback(() => {
     const currentScrollY = window.scrollY;
-    console.log(currentScrollY)
+    // console.log(currentScrollY)
     if (currentScrollY > 150 && showHeader) {
       setShowHeader(false);
     }
@@ -46,11 +52,23 @@ function App() {
   }, [handleScroll]);
 
 
+  const getUserTokenBalance = async (user: string, token: string) => {
+    if (!user) return 0;
+    const provider = new ethers.BrowserProvider(window.ethereum);
 
+    const contract = new ethers.Contract(token, ERC20ABI.abi, provider);
+
+    const balance = await contract.balanceOf(user);
+    return balance;
+  }
 
   // Load user positions when wallet connects/disconnects
   useEffect(() => {
     loadUserPositions();
+
+    getUserTokenBalance(connectedAddress, deployment.weth).then((balance) => {
+      console.log("WETH balance:", balance);
+    });
   }, [connectedAddress]);
 
   useEffect(() => {
@@ -332,15 +350,66 @@ function App() {
     }
   };
 
-  const handleFaucetClaim = async (symbol: string) => {
+  const handleFaucetClaim = async (tokenAddress: string, symbol: string) => {
+
     if (!connectedAddress) {
       alert('Please connect your wallet first');
       return;
     }
 
-    alert(`Claimed 100 ${symbol} test tokens!`);
-  };
+    
 
+    if (tokenAddress !== "0x0000000000000000000000000000000000000000") {
+      try {
+        const provider = new ethers.BrowserProvider(window.ethereum);
+
+        const signer = await provider.getSigner();
+
+        const contract = new ethers.Contract(tokenAddress, ERC20ABI.abi, signer);
+
+        console.log(contract);
+        console.log("user balance", await contract.balanceOf(connectedAddress));
+
+        // Use parseUnits instead of parseEther for tokens that might not be 18 decimals
+        // Adjust the amount and decimals as needed for your tokens
+        const decimals = await contract.decimals();
+        const tx = await contract.mint(connectedAddress, ethers.parseUnits("100", decimals));
+        await tx.wait();
+        const hash = tx.hash;
+
+        toast.success(`Claimed 100 ${symbol} test tokens! Transaction hash: ${hash}`, {
+          position: "top-right",
+          autoClose: 5000,
+          hideProgressBar: false,
+          closeOnClick: true,
+          pauseOnHover: true,
+          draggable: true,
+          progress: undefined,
+        });
+      } catch (error) {
+        console.error("Error claiming tokens:", error);
+        toast.error(`Failed to claim ${symbol} `, {
+          position: "top-right",
+          autoClose: 5000,
+          hideProgressBar: false,
+          closeOnClick: true,
+          pauseOnHover: true,
+          draggable: true,
+          progress: undefined,
+        });
+      }
+    }else{
+      toast.info(`We are not able to mint ${symbol} tokens`, {
+        position: "top-right",
+        autoClose: 5000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+      });
+    }
+  };
   const calculateNetWorth = () => {
     const supplied = userPositions
       .filter((p) => p.position_type === 'supply')

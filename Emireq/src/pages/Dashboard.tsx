@@ -41,6 +41,8 @@ export function Dashboard({
     const suppliedPositions = userPositions.filter((p) => p.position_type === 'supply');
     const borrowedPositions = userPositions.filter((p) => p.position_type === 'borrow');
 
+
+    
     const getWalletBalance = (symbol: string) => {
         const balances: Record<string, number> = {
             'WBTC': 0.9,
