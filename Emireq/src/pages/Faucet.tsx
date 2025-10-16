@@ -4,6 +4,7 @@ import { MarketData } from '../lib/supabase';
 interface FaucetProps {
   assets: MarketData[];
   onClaim: (symbol: string) => void;
+    isConnected?: boolean;
 }
 
 export function Faucet({ assets, onClaim }: FaucetProps) {

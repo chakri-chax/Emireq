@@ -3,13 +3,22 @@ import { Settings } from 'lucide-react';
 interface HeaderProps {
   connectedAddress?: string;
   onConnect: () => void;
+  onDisconnect: () => void;
+  isConnected: boolean;
+  formatAddress: (address: string) => string;
+  walletError: string;
+  isMetaMaskInstalled: boolean;
 }
 
-export function Header({ connectedAddress, onConnect }: HeaderProps) {
-  const formatAddress = (address: string) => {
-    return `${address.slice(0, 4)}...${address.slice(-4)}`;
-  };
-
+export function Header({ 
+  connectedAddress, 
+  onConnect, 
+  onDisconnect,
+  isConnected, 
+  formatAddress,
+  walletError,
+  isMetaMaskInstalled 
+}: HeaderProps) {
   return (
     <header className="bg-[#1c1f2e] border-b border-gray-800 px-6 py-3">
       <div className="max-w-[1800px] mx-auto flex items-center justify-between">
@@ -52,6 +61,18 @@ export function Header({ connectedAddress, onConnect }: HeaderProps) {
         </div>
 
         <div className="flex items-center gap-3">
+          {!isMetaMaskInstalled && (
+            <div className="text-red-400 text-sm mr-2">
+              Install MetaMask
+            </div>
+          )}
+          
+          {walletError && (
+            <div className="text-red-400 text-sm mr-2">
+              {walletError}
+            </div>
+          )}
+          
           <button className="px-3 py-1.5 bg-gray-800 hover:bg-gray-700 text-gray-300 text-sm rounded-lg transition-colors flex items-center gap-2">
             Bridge GHO
             <span className="text-xs">⚙</span>
@@ -60,17 +81,26 @@ export function Header({ connectedAddress, onConnect }: HeaderProps) {
             Swap
             <span className="text-xs">↗</span>
           </button>
-          {connectedAddress ? (
-            <button className="px-4 py-1.5 bg-[#2a2d3f] hover:bg-[#33364a] text-white text-sm rounded-lg transition-colors flex items-center gap-2 border border-gray-700">
-              <span className="text-xs">🦊</span>
-              {formatAddress(connectedAddress)}
-            </button>
+          {isConnected && connectedAddress ? (
+            <div className="flex items-center gap-2">
+              <button className="px-4 py-1.5 bg-[#2a2d3f] hover:bg-[#33364a] text-white text-sm rounded-lg transition-colors flex items-center gap-2 border border-gray-700">
+                <span className="text-xs">🦊</span>
+                {formatAddress(connectedAddress)}
+              </button>
+              <button
+                onClick={onDisconnect}
+                className="px-3 py-1.5 bg-red-600 hover:bg-red-700 text-white text-sm rounded-lg transition-colors"
+              >
+                Disconnect
+              </button>
+            </div>
           ) : (
             <button
               onClick={onConnect}
               className="px-4 py-1.5 bg-blue-600 hover:bg-blue-700 text-white text-sm rounded-lg transition-colors"
+              disabled={!isMetaMaskInstalled}
             >
-              Connect Wallet
+              {isMetaMaskInstalled ? 'Connect Wallet' : 'Install MetaMask'}
             </button>
           )}
           <button className="p-2 hover:bg-gray-800 rounded-lg transition-colors">

@@ -1,15 +1,21 @@
 // SPDX-License-Identifier: MIT
 pragma solidity ^0.8.19;
 
-/**
- * @title SimplePriceOracle
- * @dev Basic price oracle for testing - replace with Chainlink in production
- */
 contract SimplePriceOracle {
-    mapping(address => uint256) private prices;
+    struct AssetConfig {
+        uint256 price;
+        uint8 decimals;
+        bool isSupported;
+    }
+
+    mapping(address => AssetConfig) private assetConfigs;
+    address[] private supportedAssets;
     address private owner;
 
     event AssetPriceUpdated(address indexed asset, uint256 price);
+    event AssetDecimalUpdated(address indexed asset, uint8 decimals);
+    event AssetAdded(address indexed asset, uint256 price, uint8 decimals);
+    event AssetRemoved(address indexed asset);
 
     modifier onlyOwner() {
         require(msg.sender == owner, "Only owner can update prices");
@@ -18,24 +24,81 @@ contract SimplePriceOracle {
 
     constructor() {
         owner = msg.sender;
-        
-        // Set some default prices for testing
-        // WETH: $2000
-        prices[0xC02aaA39b223FE8D0A0e5C4F27eAD9083C756Cc2] = 2000 * 10**8;
-        // USDC: $1
-        prices[0xA0b86991c6218b36c1d19D4a2e9Eb0cE3606eB48] = 1 * 10**8;
-        // DAI: $1
-        prices[0x6B175474E89094C44Da98b954EedeAC495271d0F] = 1 * 10**8;
+    }
+
+    /**
+     * @dev Add a new supported asset with price and decimals
+     */
+    function addAsset(
+        address asset,
+        uint256 price,
+        uint8 decimals
+    ) external onlyOwner {
+        require(!assetConfigs[asset].isSupported, "Asset already supported");
+
+        assetConfigs[asset] = AssetConfig(price, decimals, true);
+        supportedAssets.push(asset);
+
+        emit AssetAdded(asset, price, decimals);
+    }
+
+    /**
+     * @dev Remove an asset from supported list
+     */
+    function removeAsset(address asset) external onlyOwner {
+        require(assetConfigs[asset].isSupported, "Asset not supported");
+
+        assetConfigs[asset].isSupported = false;
+
+        // Remove from supportedAssets array
+        for (uint i = 0; i < supportedAssets.length; i++) {
+            if (supportedAssets[i] == asset) {
+                supportedAssets[i] = supportedAssets[
+                    supportedAssets.length - 1
+                ];
+                supportedAssets.pop();
+                break;
+            }
+        }
+
+        emit AssetRemoved(asset);
     }
 
     function setAssetPrice(address asset, uint256 price) external onlyOwner {
-        prices[asset] = price;
+        require(assetConfigs[asset].isSupported, "Asset not supported");
+        assetConfigs[asset].price = price;
         emit AssetPriceUpdated(asset, price);
     }
 
+    function setAssetDecimal(address asset, uint8 decimal) external onlyOwner {
+        require(assetConfigs[asset].isSupported, "Asset not supported");
+        assetConfigs[asset].decimals = decimal;
+        emit AssetDecimalUpdated(asset, decimal);
+    }
+
     function getAssetPrice(address asset) external view returns (uint256) {
-        require(prices[asset] > 0, "Price not set for asset");
-        return prices[asset];
+        require(assetConfigs[asset].isSupported, "Asset not supported");
+        return assetConfigs[asset].price;
+    }
+
+    function getAssetDecimal(address asset) external view returns (uint8) {
+        require(assetConfigs[asset].isSupported, "Asset not supported");
+        return assetConfigs[asset].decimals;
+    }
+
+    function isAssetSupported(address asset) external view returns (bool) {
+        return assetConfigs[asset].isSupported;
+    }
+
+    function getSupportedAssets() external view returns (address[] memory) {
+        return supportedAssets;
+    }
+
+    function getAssetConfig(
+        address asset
+    ) external view returns (uint256 price, uint8 decimals, bool isSupported) {
+        AssetConfig memory config = assetConfigs[asset];
+        return (config.price, config.decimals, config.isSupported);
     }
 
     function transferOwnership(address newOwner) external onlyOwner {

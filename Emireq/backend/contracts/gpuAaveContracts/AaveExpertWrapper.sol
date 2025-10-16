@@ -5,19 +5,13 @@ import {IPool} from "@aave/core-v3/contracts/interfaces/IPool.sol";
 import {IPoolAddressesProvider} from "@aave/core-v3/contracts/interfaces/IPoolAddressesProvider.sol";
 import {IERC20} from "@aave/core-v3/contracts/dependencies/openzeppelin/contracts/IERC20.sol";
 import {SafeERC20} from "@aave/core-v3/contracts/dependencies/openzeppelin/contracts/SafeERC20.sol";
-import "hardhat/console.sol";
-/**
- * @title AaveExpertWrapper
- * @dev Expert-level wrapper for custom Aave V3 deployment
- */
+
 contract AaveExpertWrapper {
     using SafeERC20 for IERC20;
     
     IPoolAddressesProvider public immutable ADDRESSES_PROVIDER;
     IPool public pool;
     
-    uint256 public constant STABLE = 1;
-    uint256 public constant VARIABLE = 2;
     uint16 public constant REFERRAL_CODE = 0;
     
     event PoolInitialized(address pool);
@@ -86,11 +80,8 @@ contract AaveExpertWrapper {
         _validateInputs(asset, amount);
         if (to == address(0)) revert InvalidAddress();
         
-        // Get initial balance to calculate actual withdrawn amount
         uint256 initialBalance = IERC20(asset).balanceOf(to);
-        console.log("initialBalance: aave", initialBalance);
         try pool.withdraw(asset, amount, to) returns (uint256 /* withdrawnAmount*/) {
-            // Verify that tokens were actually transferred
             uint256 finalBalance = IERC20(asset).balanceOf(to);
             uint256 actualReceived = finalBalance - initialBalance;
             

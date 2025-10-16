@@ -3,19 +3,35 @@ import { Header } from './components/Header';
 import { MarketHeader } from './components/MarketHeader';
 import { Dashboard } from './pages/Dashboard';
 import { Faucet } from './pages/Faucet';
+import { dummyMarketData } from './lib/dummyData.ts';
 import { supabase, MarketData, UserPosition } from './lib/supabase';
-
+// @ts-ignore
+import { useMetaMask } from './hooks/useMetaMask';
 function App() {
   const [currentPage, setCurrentPage] = useState<'dashboard' | 'faucet'>('dashboard');
-  const [connectedAddress, setConnectedAddress] = useState<string>('');
   const [marketData, setMarketData] = useState<MarketData[]>([]);
   const [userPositions, setUserPositions] = useState<UserPosition[]>([]);
-  const [loading, setLoading] = useState(true);
+  const [loading, setLoading] = useState(false);
+
+  // Use the MetaMask hook
+  const {
+    connectedAddress,
+    isConnected,
+    error: walletError,
+    handleConnect,
+    handleDisconnect,
+    formatAddress,
+    isMetaMaskInstalled
+  } = useMetaMask();
 
   useEffect(() => {
     loadMarketData();
-    loadUserPositions();
   }, []);
+
+  // Load user positions when wallet connects/disconnects
+  useEffect(() => {
+    loadUserPositions();
+  }, [connectedAddress]);
 
   useEffect(() => {
     const handleHashChange = () => {
@@ -34,37 +50,52 @@ function App() {
   }, []);
 
   const loadMarketData = async () => {
-    const { data, error } = await supabase
-      .from('market_data')
-      .select('*')
-      .order('asset_symbol');
-
-    if (data && !error) {
-      setMarketData(data);
-    }
-    setLoading(false);
+    setMarketData(dummyMarketData);
+    // try {
+    //   // Try to load from Supabase first
+    //   const { data, error } = await supabase
+    //     .from('market_data')
+    //     .select('*')
+    //     .order('asset_symbol');
+      
+    //   if (data && !error) {
+    //     setMarketData(data);
+    //   } else {
+    //     // Fallback to dummy data if Supabase fails
+    //     console.log('Using dummy market data');
+    //     setMarketData(dummyMarketData);
+    //   }
+    // } catch (error) {
+    //   // Fallback to dummy data on error
+    //   console.log('Error loading market data, using dummy data:', error);
+    //   setMarketData(dummyMarketData);
+    // } finally {
+    //   setLoading(false);
+    // }
   };
 
+
   const loadUserPositions = async () => {
-    if (!connectedAddress) return;
+    if (!connectedAddress) {
+      setUserPositions([]);
+      return;
+    }
 
     const { data, error } = await supabase
       .from('user_positions')
       .select('*')
-      .eq('user_address', connectedAddress);
+      .eq('user_address', connectedAddress.toLowerCase()); // Ensure case consistency
 
     if (data && !error) {
       setUserPositions(data);
     }
   };
 
-  const handleConnect = () => {
-    const mockAddress = '0x31...3c20';
-    setConnectedAddress(mockAddress);
-  };
-
   const handleSupply = async (symbol: string, amount: number, enableCollateral: boolean) => {
-    if (!connectedAddress) return;
+    if (!connectedAddress) {
+      alert('Please connect your wallet first');
+      return;
+    }
 
     const asset = marketData.find((a) => a.asset_symbol === symbol);
     if (!asset) return;
@@ -90,7 +121,7 @@ function App() {
       const { error } = await supabase
         .from('user_positions')
         .insert({
-          user_address: connectedAddress,
+          user_address: connectedAddress.toLowerCase(),
           asset_symbol: symbol,
           position_type: 'supply',
           amount,
@@ -104,7 +135,7 @@ function App() {
     }
 
     await supabase.from('transactions').insert({
-      user_address: connectedAddress,
+      user_address: connectedAddress.toLowerCase(),
       transaction_type: 'supply',
       asset_symbol: symbol,
       amount,
@@ -114,7 +145,10 @@ function App() {
   };
 
   const handleBorrow = async (symbol: string, amount: number) => {
-    if (!connectedAddress) return;
+    if (!connectedAddress) {
+      alert('Please connect your wallet first');
+      return;
+    }
 
     const asset = marketData.find((a) => a.asset_symbol === symbol);
     if (!asset) return;
@@ -139,7 +173,7 @@ function App() {
       const { error } = await supabase
         .from('user_positions')
         .insert({
-          user_address: connectedAddress,
+          user_address: connectedAddress.toLowerCase(),
           asset_symbol: symbol,
           position_type: 'borrow',
           amount,
@@ -153,7 +187,7 @@ function App() {
     }
 
     await supabase.from('transactions').insert({
-      user_address: connectedAddress,
+      user_address: connectedAddress.toLowerCase(),
       transaction_type: 'borrow',
       asset_symbol: symbol,
       amount,
@@ -163,7 +197,10 @@ function App() {
   };
 
   const handleWithdraw = async (symbol: string, amount: number) => {
-    if (!connectedAddress) return;
+    if (!connectedAddress) {
+      alert('Please connect your wallet first');
+      return;
+    }
 
     const existingPosition = userPositions.find(
       (p) => p.asset_symbol === symbol && p.position_type === 'supply'
@@ -197,7 +234,7 @@ function App() {
     }
 
     await supabase.from('transactions').insert({
-      user_address: connectedAddress,
+      user_address: connectedAddress.toLowerCase(),
       transaction_type: 'withdraw',
       asset_symbol: symbol,
       amount,
@@ -207,7 +244,10 @@ function App() {
   };
 
   const handleRepay = async (symbol: string, amount: number) => {
-    if (!connectedAddress) return;
+    if (!connectedAddress) {
+      alert('Please connect your wallet first');
+      return;
+    }
 
     const existingPosition = userPositions.find(
       (p) => p.asset_symbol === symbol && p.position_type === 'borrow'
@@ -241,7 +281,7 @@ function App() {
     }
 
     await supabase.from('transactions').insert({
-      user_address: connectedAddress,
+      user_address: connectedAddress.toLowerCase(),
       transaction_type: 'repay',
       asset_symbol: symbol,
       amount,
@@ -251,6 +291,11 @@ function App() {
   };
 
   const handleToggleCollateral = async (positionId: string) => {
+    if (!connectedAddress) {
+      alert('Please connect your wallet first');
+      return;
+    }
+
     const position = userPositions.find((p) => p.id === positionId);
     if (!position) return;
 
@@ -296,13 +341,22 @@ function App() {
 
   return (
     <div className="min-h-screen bg-[#16191f]">
-      <Header connectedAddress={connectedAddress} onConnect={handleConnect} />
+      <Header
+        connectedAddress={connectedAddress}
+        onConnect={handleConnect}
+        onDisconnect={handleDisconnect}
+        isConnected={isConnected}
+        formatAddress={formatAddress}
+        walletError={walletError}
+        isMetaMaskInstalled={isMetaMaskInstalled}
+      />
       {currentPage === 'dashboard' && (
         <>
           <MarketHeader
             netWorth={calculateNetWorth()}
             netApy={0.01}
             availableRewards={0}
+            isConnected={isConnected}
           />
           <Dashboard
             marketData={marketData}
@@ -312,11 +366,16 @@ function App() {
             onWithdraw={handleWithdraw}
             onRepay={handleRepay}
             onToggleCollateral={handleToggleCollateral}
+            isConnected={isConnected}
           />
         </>
       )}
       {currentPage === 'faucet' && (
-        <Faucet assets={marketData} onClaim={handleFaucetClaim} />
+        <Faucet
+          assets={marketData}
+          onClaim={handleFaucetClaim}
+          isConnected={isConnected}
+        />
       )}
     </div>
   );

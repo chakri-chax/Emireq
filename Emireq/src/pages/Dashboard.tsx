@@ -15,6 +15,7 @@ interface DashboardProps {
     onWithdraw: (symbol: string, amount: number) => void;
     onRepay: (symbol: string, amount: number) => void;
     onToggleCollateral: (positionId: string) => void;
+    isConnected?: boolean;
 }
 
 interface ModalState {
@@ -50,7 +51,6 @@ export function Dashboard({
         };
         return balances[symbol] || 0;
     };
-
     const openModal = (type: 'supply' | 'borrow' | 'withdraw' | 'repay', asset: MarketData, position?: UserPosition) => {
         setModalState({ type, asset, position });
     };
@@ -316,7 +316,7 @@ export function Dashboard({
                             <tbody>
                                 {assetsToSupply.map((asset) => {
                                     const balance = getWalletBalance(asset.asset_symbol);
-                                    const isIsolated = asset.asset_symbol === 'USDT';
+                                    // const isIsolated = asset.asset_symbol === 'USDT';
                                     return (
                                         <tr key={asset.asset_symbol} className="border-b border-gray-800 hover:bg-gray-800/30 transition-colors">
                                             <td className="px-6 py-4">

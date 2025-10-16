@@ -2,9 +2,10 @@ interface MarketHeaderProps {
   netWorth: number;
   netApy: number;
   availableRewards: number;
+  isConnected?: boolean;
 }
 
-export function MarketHeader({ netWorth, netApy, availableRewards }: MarketHeaderProps) {
+export function MarketHeader({ netWorth, netApy, availableRewards, isConnected }: MarketHeaderProps) {
   return (
     <div className="bg-[#1c1f2e] border-b border-gray-800 px-6 py-6">
       <div className="max-w-[1800px] mx-auto">
@@ -21,6 +22,11 @@ export function MarketHeader({ netWorth, netApy, availableRewards }: MarketHeade
                 </span>
                 <span className="text-gray-500 text-lg">▼</span>
               </h1>
+              {!isConnected && (
+                <p className="text-yellow-400 text-sm mt-1">
+                  Connect your wallet to view personalized data
+                </p>
+              )}
             </div>
           </div>
 
@@ -33,7 +39,7 @@ export function MarketHeader({ netWorth, netApy, availableRewards }: MarketHeade
           <div>
             <div className="text-gray-400 text-sm mb-1">Net worth</div>
             <div className="text-white text-2xl font-semibold">
-              ${netWorth.toLocaleString()}
+              ${isConnected ? netWorth.toLocaleString() : '0.00'}
             </div>
           </div>
           <div>
@@ -42,16 +48,24 @@ export function MarketHeader({ netWorth, netApy, availableRewards }: MarketHeade
               <span className="text-xs cursor-help">ⓘ</span>
             </div>
             <div className="text-white text-2xl font-semibold">
-              {netApy < 0 ? '-' : ''}&lt;{Math.abs(netApy).toFixed(2)}%
+              {isConnected ? (
+                <>
+                  {netApy < 0 ? '-' : ''}&lt;{Math.abs(netApy).toFixed(2)}%
+                </>
+              ) : (
+                '0.00%'
+              )}
             </div>
           </div>
           <div>
             <div className="text-gray-400 text-sm mb-1">Available rewards</div>
             <div className="text-white text-2xl font-semibold flex items-center gap-2">
-              ${availableRewards}
-              <span className="px-2 py-1 bg-gradient-to-r from-pink-500 to-purple-500 text-white text-xs rounded font-medium">
-                CLAIM
-              </span>
+              ${isConnected ? availableRewards : '0.00'}
+              {isConnected && (
+                <span className="px-2 py-1 bg-gradient-to-r from-pink-500 to-purple-500 text-white text-xs rounded font-medium">
+                  CLAIM
+                </span>
+              )}
             </div>
           </div>
         </div>
