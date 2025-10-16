@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useCallback } from 'react';
 import { Header } from './components/Header';
 import { MarketHeader } from './components/MarketHeader';
 import { Dashboard } from './pages/Dashboard';
@@ -12,6 +12,7 @@ function App() {
   const [marketData, setMarketData] = useState<MarketData[]>([]);
   const [userPositions, setUserPositions] = useState<UserPosition[]>([]);
   const [loading, setLoading] = useState(false);
+  const [showHeader, setShowHeader] = useState(true);
 
   // Use the MetaMask hook
   const {
@@ -27,6 +28,25 @@ function App() {
   useEffect(() => {
     loadMarketData();
   }, []);
+
+  const handleScroll = useCallback(() => {
+    const currentScrollY = window.scrollY;
+    console.log(currentScrollY)
+    if (currentScrollY > 150 && showHeader) {
+      setShowHeader(false);
+    }
+    else if (currentScrollY <= 150 && !showHeader) {
+      setShowHeader(true);
+    }
+  }, [showHeader]);
+
+  useEffect(() => {
+    window.addEventListener("scroll", handleScroll);
+    return () => window.removeEventListener("scroll", handleScroll);
+  }, [handleScroll]);
+
+
+
 
   // Load user positions when wallet connects/disconnects
   useEffect(() => {
@@ -57,7 +77,7 @@ function App() {
     //     .from('market_data')
     //     .select('*')
     //     .order('asset_symbol');
-      
+
     //   if (data && !error) {
     //     setMarketData(data);
     //   } else {
@@ -341,15 +361,21 @@ function App() {
 
   return (
     <div className="min-h-screen bg-[#16191f]">
-      <Header
-        connectedAddress={connectedAddress}
-        onConnect={handleConnect}
-        onDisconnect={handleDisconnect}
-        isConnected={isConnected}
-        formatAddress={formatAddress}
-        walletError={walletError}
-        isMetaMaskInstalled={isMetaMaskInstalled}
-      />
+      <div
+        className={`${showHeader ? 'translate-y-0' : '-translate-y-full'
+          } sticky top-0 z-50 transition-transform duration-[225ms] ease-[cubic-bezier(0,0,0.2,1)]`}
+      >
+        <Header
+          connectedAddress={connectedAddress}
+          onConnect={handleConnect}
+          onDisconnect={handleDisconnect}
+          isConnected={isConnected}
+          formatAddress={formatAddress}
+          walletError={walletError}
+          isMetaMaskInstalled={isMetaMaskInstalled}
+        />
+      </div>
+
       {currentPage === 'dashboard' && (
         <>
           <MarketHeader

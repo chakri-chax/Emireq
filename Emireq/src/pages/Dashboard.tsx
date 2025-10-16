@@ -93,9 +93,9 @@ export function Dashboard({
 
     return (
         <div className="min-h-screen bg-[#16191f]">
-            <div className="max-w-[1800px] mx-auto p-6">
+            <div className="max-w-[1800px] mx-auto p-[0.75rem_3rem]">
                 <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-6">
-                    <div className="bg-[#1c1f2e] rounded-2xl border border-gray-800 overflow-hidden">
+                    <div className="bg-[#1c1f2e] rounded-[4px] border border-gray-800 overflow-hidden">
                         <div className="px-6 py-4 border-b border-gray-800 flex items-center justify-between">
                             <h2 className="text-white text-lg font-semibold">Your supplies</h2>
                             <button className="text-gray-400 hover:text-white text-sm">Hide —</button>
@@ -188,7 +188,7 @@ export function Dashboard({
                         )}
                     </div>
 
-                    <div className="bg-[#1c1f2e] rounded-2xl border border-gray-800 overflow-hidden">
+                    <div className="bg-[#1c1f2e] rounded-[4px] border border-gray-800 overflow-hidden">
                         <div className="px-6 py-4 border-b border-gray-800 flex items-center justify-between">
                             <h2 className="text-white text-lg font-semibold">Your borrows</h2>
                             <button className="text-gray-400 hover:text-white text-sm">Hide —</button>
@@ -267,7 +267,7 @@ export function Dashboard({
                 </div>
 
                 <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-                    <div className="bg-[#1c1f2e] rounded-2xl border border-gray-800 overflow-hidden">
+                    <div className="bg-[#1c1f2e] rounded-[4px] border border-gray-800 overflow-hidden">
                         <div className="px-6 py-4 border-b border-gray-800 flex items-center justify-between">
                             <h2 className="text-white text-lg font-semibold">Assets to supply</h2>
                             <div className="flex items-center gap-3">
@@ -366,7 +366,7 @@ export function Dashboard({
                         </table>
                     </div>
 
-                    <div className="bg-[#1c1f2e] rounded-2xl border border-gray-800 overflow-hidden">
+                    <div className="bg-[#1c1f2e] rounded-[4px] border border-gray-800 overflow-hidden">
                         <div className="px-6 py-4 border-b border-gray-800 flex items-center justify-between">
                             <h2 className="text-white text-lg font-semibold">Assets to borrow</h2>
                             <div className="flex items-center gap-3">

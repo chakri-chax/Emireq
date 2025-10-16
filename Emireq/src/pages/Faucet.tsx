@@ -21,7 +21,7 @@ export function Faucet({ assets, onClaim }: FaucetProps) {
           </p>
         </div>
 
-        <div className="bg-[#1c1f2e] rounded-2xl border border-gray-800 overflow-hidden">
+        <div className="bg-[#1c1f2e] rounded-[4px] border border-gray-800 overflow-hidden">
           <div className="px-6 py-4 border-b border-gray-800">
             <h2 className="text-white text-xl font-semibold">Test Assets</h2>
           </div>

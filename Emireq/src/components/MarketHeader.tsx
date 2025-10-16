@@ -7,7 +7,7 @@ interface MarketHeaderProps {
 
 export function MarketHeader({ netWorth, netApy, availableRewards, isConnected }: MarketHeaderProps) {
   return (
-    <div className="bg-[#1c1f2e] border-b border-gray-800 px-6 py-6">
+    <div className=" border-b border-gray-800 mx-[3rem] py-6">
       <div className="max-w-[1800px] mx-auto">
         <div className="flex items-center justify-between">
           <div className="flex items-center gap-3">
