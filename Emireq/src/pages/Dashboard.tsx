@@ -10,7 +10,7 @@ import { getUserTokenBalance, useAssetPrices } from '../hooks/balances';
 import { useMetaMask } from '../hooks/useMetaMask';
 import { useContractPositions } from "../hooks/useContractPositions";
 import { arrayBuffer } from 'stream/consumers';
-import { log } from 'console';
+import { ethers } from 'ethers';
 interface DashboardProps {
     marketData: MarketData[];
     userPositions: UserPosition[];
@@ -54,7 +54,7 @@ export function Dashboard({
 
     const suppliedPositions = userPositions.filter((p) => p.position_type === 'supply');
     const borrowedPositions = borrowPositions.filter((p) => p.position_type === 'borrow');
-    
+
     // Fetch wallet balances when connectedAddress or marketData changes
     useEffect(() => {
         const fetchBalances = async () => {
@@ -99,7 +99,7 @@ export function Dashboard({
         if (modalState.asset) {
             onSupply(modalState.asset.asset_symbol, amount, enableCollateral);
         }
-        
+
     };
 
     const handleBorrow = (amount: number) => {
@@ -107,8 +107,8 @@ export function Dashboard({
         if (modalState.asset) {
             onBorrow(modalState.asset.asset_symbol, amount);
         }
-        
-        
+
+
     };
 
     const handleWithdraw = (amount: number) => {
@@ -141,17 +141,38 @@ export function Dashboard({
         )
 
     );
+    const formatBorrowAmount = (borrowableAsset: any, asset: any) => {
+        if (!borrowableAsset) return 0;
 
-   const assetAddresses = marketData.map(asset => asset.address);
-  const { prices: oraclePrices, loading: pricesLoading } = useAssetPrices(assetAddresses);
+        // Get the maxBorrowAmount (which is the raw BigInt value)
+        const rawAmount = borrowableAsset.maxBorrowAmount;
 
- 
+        // Determine decimals based on asset symbol
+        const getAssetDecimals = (symbol: string) => {
+            const decimals: { [key: string]: number } = {
+                'WETH': 18,
+                'USDC': 6,
+                'USDT': 6,
+                'DAI': 18,
+                'WBTC': 8
+            };
+            return decimals[symbol] || 18;
+        };
 
-  // Helper function to get asset price
-  const getAssetPrice = (assetAddress: string) => {
-    const price = oraclePrices[assetAddress.toLowerCase()];
-    // console.log("oraclePrice for", assetAddress, price);
-    return price || 1;   };
+        const decimals = getAssetDecimals(asset.asset_symbol);
+        return parseFloat(ethers.formatUnits(rawAmount, decimals));
+    };
+    const assetAddresses = marketData.map(asset => asset.address);
+    const { prices: oraclePrices, loading: pricesLoading } = useAssetPrices(assetAddresses);
+
+
+
+    // Helper function to get asset price
+    const getAssetPrice = (assetAddress: string) => {
+        const price = oraclePrices[assetAddress.toLowerCase()];
+        // console.log("oraclePrice for", assetAddress, price);
+        return price || 1;
+    };
 
 
     return (
@@ -484,10 +505,10 @@ export function Dashboard({
                                         borrowable => borrowable.assetSymbol === asset.asset_symbol
                                     );
 
-                                    const available = borrowableAsset ? parseFloat(borrowableAsset.formattedMaxBorrow) : 0;
+                                    // Use the helper function to properly format the amount
+                                    const available = formatBorrowAmount(borrowableAsset, asset);
                                     const assetPrice = getAssetPrice(asset.address);
                                     const usdValue = available * assetPrice;
-
                                     return (
                                         <tr key={asset.asset_symbol} className="border-b border-gray-800 hover:bg-gray-800/30 transition-colors">
                                             <td className="px-6 py-4">
