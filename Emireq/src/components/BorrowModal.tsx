@@ -1,8 +1,13 @@
 import { useState } from 'react';
-import { X, Info, AlertTriangle } from 'lucide-react';
+import { X, Info } from 'lucide-react';
 import { AssetIcon } from './AssetIcon';
 import { MarketData } from '../lib/supabase';
-
+import { useMetaMask } from '../hooks/useMetaMask';
+import { ethers } from 'ethers';
+import ERC20ABI from "../../backend/artifacts/contracts/mocks/MockERC20.sol/MockERC20.json";
+import deployment from "../../backend/deployment.json"
+import WrapperABI from "../../backend/artifacts/contracts/gpuAaveContracts/AaveExpertWrapper.sol/AaveExpertWrapper.json";
+import PoolABI from "../../backend/artifacts/contracts/mocks/MockPool.sol/MockPool.json";
 interface BorrowModalProps {
   asset: MarketData;
   availableToBorrow: number;
@@ -13,7 +18,8 @@ interface BorrowModalProps {
 
 export function BorrowModal({ asset, availableToBorrow, currentHealthFactor, onClose, onBorrow }: BorrowModalProps) {
   const [amount, setAmount] = useState('');
-
+  console.log("availableToBorrow", availableToBorrow);
+  
   const numAmount = parseFloat(amount) || 0;
   const usdValue = numAmount * 138.60;
   const newHealthFactor = currentHealthFactor > 0 ? Math.max(0, currentHealthFactor - (numAmount * 0.05)) : 0;
@@ -22,12 +28,34 @@ export function BorrowModal({ asset, availableToBorrow, currentHealthFactor, onC
     const value = (availableToBorrow * percent) / 100;
     setAmount(value.toFixed(2));
   };
+   
+const {provider, connectedAddress} = useMetaMask();
+  const handleBorrow = async() => {
+   
+      if (!provider) {
+           console.log("no provider");
+           return;
+         }
+         const signer = await provider.getSigner();
+         const token = new ethers.Contract(asset.address, ERC20ABI.abi, signer);
+     
+         const decimals = await token.decimals();
+         const allowance = await token.allowance(connectedAddress, deployment.wrapper);
+     
+         
+         const mockPool = new ethers.Contract(deployment.mockPool, PoolABI.abi, signer);
 
-  const handleBorrow = () => {
-    if (numAmount > 0 && numAmount <= availableToBorrow) {
-      onBorrow(numAmount);
-      onClose();
-    }
+        //  address asset,
+        // uint256 amount,
+        // uint256 interestRateMode,
+        // uint16 referralCode,
+        // address onBehalfOf
+        
+         const tx = await mockPool.borrow(asset.address, ethers.parseUnits(amount, decimals), 2,0,connectedAddress);
+         await tx.wait();
+
+    onBorrow(numAmount);
+     onClose();
   };
 
   return (
@@ -110,7 +138,7 @@ export function BorrowModal({ asset, availableToBorrow, currentHealthFactor, onC
             <div className="flex items-start gap-2 p-3 bg-cyan-500/10 rounded-lg border border-cyan-500/30">
               <Info className="w-4 h-4 text-cyan-400 mt-0.5 flex-shrink-0" />
               <div className="text-cyan-300 text-xs leading-relaxed">
-                <span className="font-semibold">Attention:</span> Parameter changes via governance can alter your account health factor and risk of liquidation. Follow the{' '}
+                <span className="font-semibold">Attention:</span> Parameter changes via  ffgovernance can alter your account health factor and risk of liquidation. Follow the{' '}
                 <span className="text-cyan-400 underline cursor-pointer">Aave governance forum</span> for updates.
               </div>
             </div>
@@ -122,10 +150,9 @@ export function BorrowModal({ asset, availableToBorrow, currentHealthFactor, onC
               <span className="text-xs">💰</span> &lt;$0.01
             </div>
           </div>
-
           <button
             onClick={handleBorrow}
-            disabled={numAmount === 0 || numAmount > availableToBorrow}
+            // disabled={numAmount === 0 }
             className="w-full py-3 bg-white hover:bg-gray-100 text-gray-900 font-medium rounded-lg transition-colors disabled:opacity-50 disabled:cursor-not-allowed disabled:bg-gray-700 disabled:text-gray-500"
           >
             Borrow {asset.asset_symbol}

@@ -3,6 +3,13 @@ import { X, Info } from 'lucide-react';
 import { AssetIcon } from './AssetIcon';
 import { MarketData } from '../lib/supabase';
 
+import { useMetaMask } from '../hooks/useMetaMask';
+import { ethers } from 'ethers';
+import ERC20ABI from "../../backend/artifacts/contracts/mocks/MockERC20.sol/MockERC20.json";
+import deployment from "../../backend/deployment.json"
+import WrapperABI from "../../backend/artifacts/contracts/gpuAaveContracts/AaveExpertWrapper.sol/AaveExpertWrapper.json";
+import PoolABI from "../../backend/artifacts/contracts/mocks/MockPool.sol/MockPool.json";
+
 interface WithdrawModalProps {
   asset: MarketData;
   suppliedAmount: number;
@@ -12,7 +19,7 @@ interface WithdrawModalProps {
 
 export function WithdrawModal({ asset, suppliedAmount, onClose, onWithdraw }: WithdrawModalProps) {
   const [amount, setAmount] = useState('');
-
+  const { provider, connectedAddress } = useMetaMask();
   const numAmount = parseFloat(amount) || 0;
   const usdValue = numAmount * 6000;
 
@@ -21,11 +28,22 @@ export function WithdrawModal({ asset, suppliedAmount, onClose, onWithdraw }: Wi
     setAmount(value.toFixed(6));
   };
 
-  const handleWithdraw = () => {
-    if (numAmount > 0 && numAmount <= suppliedAmount) {
-      onWithdraw(numAmount);
-      onClose();
+  const handleWithdraw = async () => {
+    if (!provider) {
+      console.log("no provider");
+      return;
     }
+    const signer = await provider.getSigner();
+    const token = new ethers.Contract(asset.address, ERC20ABI.abi, signer);
+
+    const decimals = await token.decimals();
+
+    const WrapperABIContract = new ethers.Contract(deployment.wrapper, WrapperABI.abi, signer);
+ 
+    const tx = await WrapperABIContract.withdraw(asset.address, ethers.parseUnits(amount, decimals), connectedAddress);
+    await tx.wait();
+
+    onClose();
   };
 
   return (

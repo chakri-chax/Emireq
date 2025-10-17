@@ -1,14 +1,13 @@
 // src/lib/dummyData.ts
 import { MarketData } from './supabase';
 import deployment from "../../backend/deployment.json";
-import { ethers } from 'ethers';
-
 
 export const dummyMarketData: MarketData[] = [
   {
     id: '1',
     asset_symbol: 'GPU',
     address: '0x0000000000000000000000000000000000000000',
+    decimals: 18,
     asset_name: 'GAN Chain',
     supply_apy: 0.0245, // 2.45%
     borrow_apy_variable: 0.0345, // 3.45%
@@ -25,6 +24,7 @@ export const dummyMarketData: MarketData[] = [
     id: '10',
     asset_symbol: 'WETH',
     address: deployment.weth,
+    decimals: 18,
     asset_name: 'Wrapped Ether',
     supply_apy: 0.0189, // 1.89%
     borrow_apy_variable: 0.0295, // 2.95%
@@ -41,6 +41,7 @@ export const dummyMarketData: MarketData[] = [
     id: '2',
     asset_symbol: 'USDC',
     address: deployment.usdc,
+    decimals: 6,
     asset_name: 'USD Coin',
     supply_apy: 0.0189, // 1.89%
     borrow_apy_variable: 0.0295, // 2.95%
@@ -58,6 +59,7 @@ export const dummyMarketData: MarketData[] = [
     asset_symbol: 'WBTC',
     address: deployment.wbtc,
     asset_name: 'Wrapped Bitcoin',
+    decimals: 8,
     supply_apy: 0.0156, // 1.56%
     borrow_apy_variable: 0.0267, // 2.67%
     borrow_apy_stable: 0.0218, // 2.18%
@@ -73,6 +75,7 @@ export const dummyMarketData: MarketData[] = [
     id: '4',
     asset_symbol: 'DAI',
     address: deployment.dai,
+    decimals: 18,
     asset_name: 'Dai Stablecoin',
     supply_apy: 0.0201, // 2.01%
     borrow_apy_variable: 0.0312, // 3.12%
@@ -89,6 +92,7 @@ export const dummyMarketData: MarketData[] = [
     id: '5',
     asset_symbol: 'USDT',
     address: deployment.usdt,
+    decimals: 6,
     asset_name: 'Tether USD',
     supply_apy: 0.0168, // 1.68%
     borrow_apy_variable: 0.0278, // 2.78%
@@ -106,6 +110,7 @@ export const dummyMarketData: MarketData[] = [
     id: '6',
     asset_symbol: 'UNI',
     address: '0x0000000000000000000000000000000000000000', // You'll need to add UNI address
+    decimals: 18,
     asset_name: 'Uniswap',
     supply_apy: 0.0089, // 0.89%
     borrow_apy_variable: 0.0198, // 1.98%
@@ -138,6 +143,7 @@ export const dummyMarketData: MarketData[] = [
     id: '8',
     asset_symbol: 'MATIC',
     address: '0x0000000000000000000000000000000000000000', // You'll need to add MATIC address
+    decimals: 18,
     asset_name: 'Polygon',
     supply_apy: 0.0145, // 1.45%
     borrow_apy_variable: 0.0256, // 2.56%
@@ -154,6 +160,7 @@ export const dummyMarketData: MarketData[] = [
     id: '9',
     asset_symbol: 'LINK',
     address: '0x0000000000000000000000000000000000000000', // You'll need to add LINK address
+   decimals: 18,
     asset_name: 'Chainlink',
     supply_apy: 0.0123, // 1.23%
     borrow_apy_variable: 0.0234, // 2.34%

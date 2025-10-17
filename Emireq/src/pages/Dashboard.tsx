@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { Check, MoreVertical, Info } from 'lucide-react';
 import { AssetIcon } from '../components/AssetIcon';
 import { SupplyModal } from '../components/SupplyModal';
@@ -6,10 +6,15 @@ import { BorrowModal } from '../components/BorrowModal';
 import { WithdrawModal } from '../components/WithdrawModal';
 import { RepayModal } from '../components/RepayModal';
 import { MarketData, UserPosition } from '../lib/supabase';
-
+import { getUserTokenBalance, useAssetPrices } from '../hooks/balances';
+import { useMetaMask } from '../hooks/useMetaMask';
+import { useContractPositions } from "../hooks/useContractPositions";
+import { arrayBuffer } from 'stream/consumers';
+import { log } from 'console';
 interface DashboardProps {
     marketData: MarketData[];
     userPositions: UserPosition[];
+    borrowPositions: UserPosition[];
     onSupply: (symbol: string, amount: number, enableCollateral: boolean) => void;
     onBorrow: (symbol: string, amount: number) => void;
     onWithdraw: (symbol: string, amount: number) => void;
@@ -24,9 +29,14 @@ interface ModalState {
     position?: UserPosition;
 }
 
+interface BalanceMap {
+    [symbol: string]: string;
+}
+
 export function Dashboard({
     marketData,
     userPositions,
+    borrowPositions,
     onSupply,
     onBorrow,
     onWithdraw,
@@ -37,22 +47,45 @@ export function Dashboard({
     const [showZeroBalance, setShowZeroBalance] = useState(false);
     const [supplyCategory, setSupplyCategory] = useState('All Categories');
     const [borrowCategory, setBorrowCategory] = useState('All Categories');
+    const [balances, setBalances] = useState<BalanceMap>({});
+    const [loadingBalances, setLoadingBalances] = useState<boolean>(false);
+
+    const { connectedAddress, provider } = useMetaMask();
 
     const suppliedPositions = userPositions.filter((p) => p.position_type === 'supply');
-    const borrowedPositions = userPositions.filter((p) => p.position_type === 'borrow');
-
-
+    const borrowedPositions = borrowPositions.filter((p) => p.position_type === 'borrow');
     
-    const getWalletBalance = (symbol: string) => {
-        const balances: Record<string, number> = {
-            'WBTC': 0.9,
-            'ETH': 4.87,
-            'USDT': 10000,
-            'LINK': 0,
-            'DAI': 0,
+    // Fetch wallet balances when connectedAddress or marketData changes
+    useEffect(() => {
+        const fetchBalances = async () => {
+            if (!connectedAddress || marketData.length === 0) return;
+
+            setLoadingBalances(true);
+            const newBalances: BalanceMap = {};
+
+            try {
+                for (const asset of marketData) {
+                    const balance = await getUserTokenBalance(connectedAddress, asset.address);
+                    newBalances[asset.asset_symbol] = balance.toString();
+                }
+                setBalances(newBalances);
+            } catch (error) {
+                console.error('Error fetching wallet balances:', error);
+            } finally {
+                setLoadingBalances(false);
+            }
         };
-        return balances[symbol] || 0;
+
+        fetchBalances();
+    }, [connectedAddress, marketData]);
+
+    const getWalletBalance = (symbol: string) => {
+        return balances[symbol] || '0';
     };
+
+
+
+
     const openModal = (type: 'supply' | 'borrow' | 'withdraw' | 'repay', asset: MarketData, position?: UserPosition) => {
         setModalState({ type, asset, position });
     };
@@ -61,16 +94,21 @@ export function Dashboard({
         setModalState({ type: null, asset: null });
     };
 
+
     const handleSupply = (amount: number, enableCollateral: boolean) => {
         if (modalState.asset) {
             onSupply(modalState.asset.asset_symbol, amount, enableCollateral);
         }
+        
     };
 
     const handleBorrow = (amount: number) => {
+        console.log("handleBorrow done");
         if (modalState.asset) {
             onBorrow(modalState.asset.asset_symbol, amount);
         }
+        
+        
     };
 
     const handleWithdraw = (amount: number) => {
@@ -87,11 +125,34 @@ export function Dashboard({
 
     const assetsToSupply = marketData.filter((asset) => {
         const position = suppliedPositions.find((p) => p.asset_symbol === asset.asset_symbol);
-        const balance = getWalletBalance(asset.asset_symbol);
+        const balance = parseFloat(getWalletBalance(asset.asset_symbol));
         return showZeroBalance || balance > 0 || (position && position.amount > 0);
     });
 
-    const assetsToBorrow = marketData;
+    const {
+
+        borrowingPower,
+
+    } = useContractPositions(marketData);
+
+    const assetsToBorrow = marketData.filter(asset =>
+        borrowingPower.borrowableAssets.some(borrowable =>
+            borrowable.assetSymbol === asset.asset_symbol
+        )
+
+    );
+
+   const assetAddresses = marketData.map(asset => asset.address);
+  const { prices: oraclePrices, loading: pricesLoading } = useAssetPrices(assetAddresses);
+
+ 
+
+  // Helper function to get asset price
+  const getAssetPrice = (assetAddress: string) => {
+    const price = oraclePrices[assetAddress.toLowerCase()];
+    // console.log("oraclePrice for", assetAddress, price);
+    return price || 1;   };
+
 
     return (
         <div className="min-h-screen bg-[#16191f]">
@@ -100,7 +161,7 @@ export function Dashboard({
                     <div className="bg-[#1c1f2e] rounded-[4px] border border-gray-800 overflow-hidden">
                         <div className="px-6 py-4 border-b border-gray-800 flex items-center justify-between">
                             <h2 className="text-white text-lg font-semibold">Your supplies</h2>
-                            <button className="text-gray-400 hover:text-white text-sm">Hide —</button>
+                            {/* <button className="text-gray-400 hover:text-white text-sm">Hide —</button> */}
                         </div>
                         {suppliedPositions.length === 0 ? (
                             <div className="px-6 py-12 text-center text-gray-400">
@@ -136,6 +197,7 @@ export function Dashboard({
                                     <tbody>
                                         {suppliedPositions.map((position) => {
                                             const asset = marketData.find((a) => a.asset_symbol === position.asset_symbol)!;
+                                            // const assetPrice = getAssetPrice(position.address);
                                             return (
                                                 <tr key={position.id} className="border-b border-gray-800 hover:bg-gray-800/30 transition-colors">
                                                     <td className="px-6 py-4">
@@ -155,8 +217,8 @@ export function Dashboard({
                                                         <button
                                                             onClick={() => onToggleCollateral(position.id)}
                                                             className={`w-6 h-6 rounded flex items-center justify-center transition-colors ${position.is_collateral
-                                                                    ? 'bg-green-500 text-white'
-                                                                    : 'bg-gray-700 text-gray-500'
+                                                                ? 'bg-green-500 text-white'
+                                                                : 'bg-gray-700 text-gray-500'
                                                                 }`}
                                                         >
                                                             {position.is_collateral && <Check className="w-4 h-4" />}
@@ -164,15 +226,15 @@ export function Dashboard({
                                                     </td>
                                                     <td className="px-6 py-4 text-right">
                                                         <div className="flex items-center justify-end gap-2">
-                                                            <button
+                                                            {/* <button
                                                                 onClick={() => openModal('supply', asset, position)}
                                                                 className="px-3 py-1.5 bg-white hover:bg-gray-100 text-gray-900 text-xs font-medium rounded transition-colors"
                                                             >
                                                                 Supply
-                                                            </button>
+                                                            </button> */}
                                                             <button
                                                                 onClick={() => openModal('withdraw', asset, position)}
-                                                                className="px-3 py-1.5 bg-gray-700 hover:bg-gray-600 text-white text-xs font-medium rounded transition-colors"
+                                                                className="px-3 py-1.5 bg-white hover:bg-gray-100 text-gray-900 text-xs font-medium rounded transition-colors"
                                                             >
                                                                 Withdraw
                                                             </button>
@@ -317,8 +379,9 @@ export function Dashboard({
                             </thead>
                             <tbody>
                                 {assetsToSupply.map((asset) => {
-                                    const balance = getWalletBalance(asset.asset_symbol);
-                                    // const isIsolated = asset.asset_symbol === 'USDT';
+                                    const balance = parseFloat(getWalletBalance(asset.asset_symbol));
+                                    const hasBalance = balance > 0;
+
                                     return (
                                         <tr key={asset.asset_symbol} className="border-b border-gray-800 hover:bg-gray-800/30 transition-colors">
                                             <td className="px-6 py-4">
@@ -328,11 +391,17 @@ export function Dashboard({
                                                 </div>
                                             </td>
                                             <td className="px-6 py-4 text-right">
-                                                <div className="text-white text-sm">{balance.toFixed(2)}</div>
-                                                {balance === 0 && (
-                                                    <div className="text-red-400 text-xs flex items-center justify-end gap-1">
-                                                        0 <span className="text-xs">⚠</span>
-                                                    </div>
+                                                {loadingBalances ? (
+                                                    <div className="text-gray-400 text-sm">Loading...</div>
+                                                ) : (
+                                                    <>
+                                                        <div className="text-white text-sm">{balance.toFixed(6)}</div>
+                                                        {!hasBalance && (
+                                                            <div className="text-red-400 text-xs flex items-center justify-end gap-1">
+                                                                0 <span className="text-xs">⚠</span>
+                                                            </div>
+                                                        )}
+                                                    </>
                                                 )}
                                             </td>
                                             <td className="px-6 py-4 text-right">
@@ -351,7 +420,7 @@ export function Dashboard({
                                                 <div className="flex items-center justify-end gap-2">
                                                     <button
                                                         onClick={() => openModal('supply', asset)}
-                                                        disabled={balance === 0}
+                                                        disabled={!hasBalance}
                                                         className="px-3 py-1.5 bg-gray-700 hover:bg-gray-600 text-white text-xs font-medium rounded transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
                                                     >
                                                         Supply
@@ -411,7 +480,14 @@ export function Dashboard({
                             </thead>
                             <tbody>
                                 {assetsToBorrow.map((asset) => {
-                                    const available = 0;
+                                    const borrowableAsset = borrowingPower.borrowableAssets.find(
+                                        borrowable => borrowable.assetSymbol === asset.asset_symbol
+                                    );
+
+                                    const available = borrowableAsset ? parseFloat(borrowableAsset.formattedMaxBorrow) : 0;
+                                    const assetPrice = getAssetPrice(asset.address);
+                                    const usdValue = available * assetPrice;
+
                                     return (
                                         <tr key={asset.asset_symbol} className="border-b border-gray-800 hover:bg-gray-800/30 transition-colors">
                                             <td className="px-6 py-4">
@@ -421,18 +497,18 @@ export function Dashboard({
                                                 </div>
                                             </td>
                                             <td className="px-6 py-4 text-right">
-                                                <div className="text-white text-sm">{available}</div>
-                                                <div className="text-gray-400 text-xs">${available}</div>
+                                                <div className="text-white text-sm">{available.toFixed(6)}</div>
+                                                <div className="text-gray-400 text-xs">${usdValue.toFixed(2)}</div>
                                             </td>
                                             <td className="px-6 py-4 text-right">
-                                                <div className="text-white text-sm">{asset.borrow_apy_variable.toFixed(2)}%</div>
+                                                <div className="text-white text-sm">{asset.borrow_apy_variable.toFixed(4)}%</div>
                                                 <Info className="w-3 h-3 inline ml-1 text-gray-400" />
                                             </td>
                                             <td className="px-6 py-4 text-right">
                                                 <div className="flex items-center justify-end gap-2">
                                                     <button
                                                         onClick={() => openModal('borrow', asset)}
-                                                        disabled={suppliedPositions.length === 0}
+                                                        disabled={suppliedPositions.length === 0 || available === 0}
                                                         className="px-3 py-1.5 bg-gray-700 hover:bg-gray-600 text-white text-xs font-medium rounded transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
                                                     >
                                                         Borrow
@@ -450,11 +526,10 @@ export function Dashboard({
                     </div>
                 </div>
             </div>
-
             {modalState.type === 'supply' && modalState.asset && (
                 <SupplyModal
                     asset={modalState.asset}
-                    walletBalance={getWalletBalance(modalState.asset.asset_symbol)}
+                    walletBalance={parseFloat(getWalletBalance(modalState.asset.asset_symbol))}
                     currentHealthFactor={0}
                     onClose={closeModal}
                     onSupply={handleSupply}
@@ -484,7 +559,7 @@ export function Dashboard({
                 <RepayModal
                     asset={modalState.asset}
                     borrowedAmount={modalState.position.amount}
-                    walletBalance={getWalletBalance(modalState.asset.asset_symbol)}
+                    walletBalance={parseFloat(getWalletBalance(modalState.asset.asset_symbol))}
                     onClose={closeModal}
                     onRepay={handleRepay}
                 />

@@ -11,12 +11,12 @@ export function MarketHeader({ netWorth, netApy, availableRewards, isConnected }
       <div className="max-w-[1800px] mx-auto">
         <div className="flex items-center justify-between">
           <div className="flex items-center gap-3">
-            <div className="w-12 h-12 rounded-full bg-gradient-to-br from-blue-500 to-cyan-500 flex items-center justify-center">
-              <span className="text-white font-bold text-lg">E</span>
+            <div className="w-12 h-12 rounded-full bg-gradient-to-br from-orange-300 to-orange-500 flex items-center justify-center">
+              <span className="text-black font-bold text-lg">G</span>
             </div>
             <div>
               <h1 className="text-white text-2xl font-semibold flex items-center gap-2">
-                Ethereum Market
+                GANchain L1
                 <span className="px-2 py-0.5 bg-blue-500/20 text-blue-400 text-xs rounded border border-blue-500/30">
                   V3
                 </span>

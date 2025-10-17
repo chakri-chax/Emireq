@@ -2,7 +2,12 @@ import { useState } from 'react';
 import { X, Info } from 'lucide-react';
 import { AssetIcon } from './AssetIcon';
 import { MarketData } from '../lib/supabase';
-
+import { useMetaMask } from '../hooks/useMetaMask';
+import { ethers } from 'ethers';
+import ERC20ABI from "../../backend/artifacts/contracts/mocks/MockERC20.sol/MockERC20.json";
+import deployment from "../../backend/deployment.json"
+import WrapperABI from "../../backend/artifacts/contracts/gpuAaveContracts/AaveExpertWrapper.sol/AaveExpertWrapper.json";
+import OracleABI from "../../backend/artifacts/contracts/gpuAaveContracts/SimplePriceOracle.sol/SimplePriceOracle.json";
 interface RepayModalProps {
   asset: MarketData;
   borrowedAmount: number;
@@ -13,7 +18,7 @@ interface RepayModalProps {
 
 export function RepayModal({ asset, borrowedAmount, walletBalance, onClose, onRepay }: RepayModalProps) {
   const [amount, setAmount] = useState('');
-
+  const {provider, connectedAddress} = useMetaMask();
   const numAmount = parseFloat(amount) || 0;
   const usdValue = numAmount * 138.60;
   const maxRepayable = Math.min(borrowedAmount, walletBalance);
@@ -22,12 +27,43 @@ export function RepayModal({ asset, borrowedAmount, walletBalance, onClose, onRe
     const value = (maxRepayable * percent) / 100;
     setAmount(value.toFixed(2));
   };
-
-  const handleRepay = () => {
-    if (numAmount > 0 && numAmount <= maxRepayable) {
-      onRepay(numAmount);
-      onClose();
+const handleApprove = async () => {
+  
+      if (!provider) {
+        console.log("no provider");
+        return;
+      }
+      const signer = await provider.getSigner();
+      const token = new ethers.Contract(asset.address, ERC20ABI.abi, signer);
+  
+      const decimals = await token.decimals();
+  
+      const tx = await token.approve(deployment.wrapper, ethers.parseUnits(amount, decimals));
+      await tx.wait();
+      // setApproval(false);
+  
+  
     }
+  const handleRepay = async() => {
+     if (!provider) {
+          console.log("no provider");
+          return;
+        }
+        const signer = await provider.getSigner();
+        const token = new ethers.Contract(asset.address, ERC20ABI.abi, signer);
+    
+        const decimals = await token.decimals();
+        const allowance = await token.allowance(connectedAddress, deployment.wrapper);
+    
+        
+        if (allowance < ethers.parseUnits(amount, decimals)) {
+          await handleApprove();
+        }
+        const wrapper = new ethers.Contract(deployment.wrapper, WrapperABI.abi, signer);
+    
+        const tx = await wrapper.repay(asset.address, ethers.parseUnits(amount, decimals),2, connectedAddress);
+        await tx.wait();
+        onClose();
   };
 
   return (

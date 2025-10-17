@@ -8,6 +8,7 @@ export const supabase = createClient(supabaseUrl, supabaseAnonKey);
 export interface MarketData {
   id: string;
   address: string;
+  decimals: number;
   asset_symbol: string;
   asset_name: string;
   supply_apy: number;
@@ -23,6 +24,17 @@ export interface MarketData {
 }
 
 export interface UserPosition {
+  id: string;
+  user_address: string;
+  asset_symbol: string;
+  position_type: 'supply' | 'borrow';
+  amount: number;
+  apy: number;
+  is_collateral: boolean;
+  created_at: string;
+  updated_at: string;
+}
+export interface BorrowPosition{
   id: string;
   user_address: string;
   asset_symbol: string;

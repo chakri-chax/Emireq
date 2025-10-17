@@ -12,14 +12,15 @@ import ERC20ABI from "../backend/artifacts/contracts/mocks/MockERC20.sol/MockERC
 import { useMetaMask } from './hooks/useMetaMask';
 import deployment from "../backend/deployment.json"
 import { toast } from 'react-toastify';
+import {useContractPositions} from "./hooks/useContractPositions";
 function App() {
   const [currentPage, setCurrentPage] = useState<'dashboard' | 'faucet'>('dashboard');
   const [marketData, setMarketData] = useState<MarketData[]>([]);
-  const [userPositions, setUserPositions] = useState<UserPosition[]>([]);
+  // const [userPositions, setUserPositions] = useState<UserPosition[]>([]);
   const [loading, setLoading] = useState(false);
   const [showHeader, setShowHeader] = useState(true);
 
-
+const { userPositions, BorrowPosition,borrowingPower, loading: positionsLoading, refetch: refetchPositions } = useContractPositions(marketData);
   // Use the MetaMask hook
   const {
     connectedAddress,
@@ -67,7 +68,7 @@ function App() {
     loadUserPositions();
 
     getUserTokenBalance(connectedAddress, deployment.weth).then((balance) => {
-      console.log("WETH balance:", balance);
+      // console.log("WETH balance:", balance);
     });
   }, [connectedAddress]);
 
@@ -114,19 +115,20 @@ function App() {
 
 
   const loadUserPositions = async () => {
-    if (!connectedAddress) {
-      setUserPositions([]);
-      return;
-    }
+    // if (!connectedAddress) {
+    //   setUserPositions([]);
+    //   return;
+    // }
 
-    const { data, error } = await supabase
-      .from('user_positions')
-      .select('*')
-      .eq('user_address', connectedAddress.toLowerCase()); // Ensure case consistency
 
-    if (data && !error) {
-      setUserPositions(data);
-    }
+    // const { data, error } = await supabase
+    //   .from('user_positions')
+    //   .select('*')
+    //   .eq('user_address', connectedAddress.toLowerCase()); // Ensure case consistency
+
+    // if (data && !error) {
+    //   setUserPositions(data);
+    // }
   };
 
   const handleSupply = async (symbol: string, amount: number, enableCollateral: boolean) => {
@@ -183,11 +185,14 @@ function App() {
   };
 
   const handleBorrow = async (symbol: string, amount: number) => {
+    console.log("handleBorrow start");
+    
     if (!connectedAddress) {
       alert('Please connect your wallet first');
       return;
     }
-
+    console.log("handleBorrow", symbol, amount);
+    
     const asset = marketData.find((a) => a.asset_symbol === symbol);
     if (!asset) return;
 
@@ -195,43 +200,43 @@ function App() {
       (p) => p.asset_symbol === symbol && p.position_type === 'borrow'
     );
 
-    if (existingPosition) {
-      const { error } = await supabase
-        .from('user_positions')
-        .update({
-          amount: existingPosition.amount + amount,
-          updated_at: new Date().toISOString(),
-        })
-        .eq('id', existingPosition.id);
+    // if (existingPosition) {
+    //   const { error } = await supabase
+    //     .from('user_positions')
+    //     .update({
+    //       amount: existingPosition.amount + amount,
+    //       updated_at: new Date().toISOString(),
+    //     })
+    //     .eq('id', existingPosition.id);
 
-      if (!error) {
-        loadUserPositions();
-      }
-    } else {
-      const { error } = await supabase
-        .from('user_positions')
-        .insert({
-          user_address: connectedAddress.toLowerCase(),
-          asset_symbol: symbol,
-          position_type: 'borrow',
-          amount,
-          apy: asset.borrow_apy_variable,
-          is_collateral: false,
-        });
+    //   if (!error) {
+    //     loadUserPositions();
+    //   }
+    // } else {
+    //   const { error } = await supabase
+    //     .from('user_positions')
+    //     .insert({
+    //       user_address: connectedAddress.toLowerCase(),
+    //       asset_symbol: symbol,
+    //       position_type: 'borrow',
+    //       amount,
+    //       apy: asset.borrow_apy_variable,
+    //       is_collateral: false,
+    //     });
 
-      if (!error) {
-        loadUserPositions();
-      }
-    }
+    //   if (!error) {
+    //     loadUserPositions();
+    //   }
+    // }
 
-    await supabase.from('transactions').insert({
-      user_address: connectedAddress.toLowerCase(),
-      transaction_type: 'borrow',
-      asset_symbol: symbol,
-      amount,
-      status: 'confirmed',
-      tx_hash: `0x${Math.random().toString(16).slice(2)}`,
-    });
+    // await supabase.from('transactions').insert({
+    //   user_address: connectedAddress.toLowerCase(),
+    //   transaction_type: 'borrow',
+    //   asset_symbol: symbol,
+    //   amount,
+    //   status: 'confirmed',
+    //   tx_hash: `0x${Math.random().toString(16).slice(2)}`,
+    // });
   };
 
   const handleWithdraw = async (symbol: string, amount: number) => {
@@ -456,6 +461,7 @@ function App() {
           <Dashboard
             marketData={marketData}
             userPositions={userPositions}
+            borrowPositions={BorrowPosition}
             onSupply={handleSupply}
             onBorrow={handleBorrow}
             onWithdraw={handleWithdraw}

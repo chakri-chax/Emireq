@@ -1,5 +1,5 @@
 import { Settings } from 'lucide-react';
-
+import GPU from '../gpulogo.svg'
 interface HeaderProps {
   connectedAddress?: string;
   onConnect: () => void;
@@ -24,13 +24,14 @@ export function Header({
       <div className="max-w-[1800px] mx-auto flex items-center justify-between">
         <div className="flex items-center gap-8">
           <div className="flex items-center gap-2">
-            <div className="w-8 h-8 rounded-lg bg-gradient-to-br from-blue-500 to-cyan-500 flex items-center justify-center">
+            {/* <div className="w-8 h-8 rounded-lg bg-gradient-to-br from-blue-500 to-cyan-500 flex items-center justify-center">
               <span className="text-white font-bold text-sm">A</span>
-            </div>
-            <span className="text-white font-semibold text-lg">aave</span>
-            <span className="px-2 py-0.5 bg-pink-500/20 text-pink-400 text-xs rounded-full border border-pink-500/30">
+            </div> */}
+            {/* <span className="text-white font-semibold text-lg">GPU</span> */}
+            <img src={GPU} alt="GPU Logo" className="w-20 h-8"/>
+            {/* <span className="px-2 py-0.5 bg-pink-500/20 text-pink-400 text-xs rounded-full border border-pink-500/30">
               TESTNET
-            </span>
+            </span> */}
           </div>
 
           <nav className="flex items-center gap-6">
@@ -89,7 +90,7 @@ export function Header({
               </button>
               <button
                 onClick={onDisconnect}
-                className="px-3 py-1.5 bg-red-600 hover:bg-red-700 text-white text-sm rounded-lg transition-colors"
+                className="px-3 py-1.5 bg-red-600 hover:bg-orange-300 text-white text-sm rounded-lg transition-colors"
               >
                 Disconnect
               </button>

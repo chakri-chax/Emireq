@@ -530,29 +530,7 @@ contract MockPool is IPool {
         supplied[asset][to] += amount;
     }
 
-    // function getUserAccountData(
-    //     address user
-    // )
-    //     external
-    //     view
-    //     override
-    //     returns (
-    //         uint256 totalCollateralBase,
-    //         uint256 totalDebtBase,
-    //         uint256 availableBorrowsBase,
-    //         uint256 currentLiquidationThreshold,
-    //         uint256 ltv,
-    //         uint256 healthFactor
-    //     )
-    // {
-    //     // Mock data for testing
-    //     totalCollateralBase = 1000 * 10 ** 8;
-    //     totalDebtBase = 500 * 10 ** 8;
-    //     availableBorrowsBase = 500 * 10 ** 8;
-    //     currentLiquidationThreshold = 8000;
-    //     ltv = 7500;
-    //     healthFactor = 200 * 10 ** 18; // 2.0 health factor
-    // }
+    
 
     function ADDRESSES_PROVIDER()
         external
