@@ -49,7 +49,8 @@ export function Dashboard({
     const [borrowCategory, setBorrowCategory] = useState('All Categories');
     const [balances, setBalances] = useState<BalanceMap>({});
     const [loadingBalances, setLoadingBalances] = useState<boolean>(false);
-
+    // const [selectedToken, setSelectedToken] = useState<string | null>(null);
+    const [borrowableAsset,setBorrowableAsset] = useState<any>(null);
     const { connectedAddress, provider } = useMetaMask();
 
     const suppliedPositions = userPositions.filter((p) => p.position_type === 'supply');
@@ -380,7 +381,7 @@ export function Dashboard({
                                 Show assets with 0 balance
                                 <a href="#faucet" className="ml-2 px-2 py-0.5 bg-blue-500/20 text-blue-400 text-xs rounded flex items-center gap-1">
                                     <span>💧</span>
-                                    ETHEREUM SEPOLIA FAUCET
+                                    GANchain SEPOLIA FAUCET
                                     <span className="text-xs">↗</span>
                                 </a>
                             </label>
@@ -528,7 +529,9 @@ export function Dashboard({
                                             <td className="px-6 py-4 text-right">
                                                 <div className="flex items-center justify-end gap-2">
                                                     <button
-                                                        onClick={() => openModal('borrow', asset)}
+                                                        onClick={() => {openModal('borrow', asset)
+                                                            setBorrowableAsset(borrowableAsset);
+                                                        }}
                                                         disabled={suppliedPositions.length === 0 || available === 0}
                                                         className="px-3 py-1.5 bg-gray-700 hover:bg-gray-600 text-white text-xs font-medium rounded transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
                                                     >
@@ -556,11 +559,11 @@ export function Dashboard({
                     onSupply={handleSupply}
                 />
             )}
-
+           
             {modalState.type === 'borrow' && modalState.asset && (
                 <BorrowModal
                     asset={modalState.asset}
-                    availableToBorrow={138.60}
+                    availableToBorrow={(formatBorrowAmount(borrowableAsset, modalState.asset))}
                     currentHealthFactor={2.0}
                     onClose={closeModal}
                     onBorrow={handleBorrow}

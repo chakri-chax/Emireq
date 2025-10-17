@@ -147,7 +147,7 @@ const handleApprove = async () => {
           <div className="space-y-2">
             <button
               className="w-full py-3 bg-gray-700 hover:bg-gray-600 text-gray-400 rounded-lg transition-colors flex items-center justify-center gap-2"
-              disabled
+              onClick={handleApprove}
             >
               Approve {asset.asset_symbol} to continue
               <Info className="w-4 h-4" />

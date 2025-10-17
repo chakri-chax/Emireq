@@ -6,7 +6,6 @@ import { useMetaMask } from '../hooks/useMetaMask';
 import { ethers } from 'ethers';
 import ERC20ABI from "../../backend/artifacts/contracts/mocks/MockERC20.sol/MockERC20.json";
 import deployment from "../../backend/deployment.json"
-import WrapperABI from "../../backend/artifacts/contracts/gpuAaveContracts/AaveExpertWrapper.sol/AaveExpertWrapper.json";
 import PoolABI from "../../backend/artifacts/contracts/mocks/MockPool.sol/MockPool.json";
 interface BorrowModalProps {
   asset: MarketData;
@@ -18,7 +17,6 @@ interface BorrowModalProps {
 
 export function BorrowModal({ asset, availableToBorrow, currentHealthFactor, onClose, onBorrow }: BorrowModalProps) {
   const [amount, setAmount] = useState('');
-  console.log("availableToBorrow", availableToBorrow);
   
   const numAmount = parseFloat(amount) || 0;
   const usdValue = numAmount * 138.60;
@@ -138,7 +136,7 @@ const {provider, connectedAddress} = useMetaMask();
             <div className="flex items-start gap-2 p-3 bg-cyan-500/10 rounded-lg border border-cyan-500/30">
               <Info className="w-4 h-4 text-cyan-400 mt-0.5 flex-shrink-0" />
               <div className="text-cyan-300 text-xs leading-relaxed">
-                <span className="font-semibold">Attention:</span> Parameter changes via  ffgovernance can alter your account health factor and risk of liquidation. Follow the{' '}
+                <span className="font-semibold">Attention:</span> Parameter changes via  governance can alter your account health factor and risk of liquidation. Follow the{' '}
                 <span className="text-cyan-400 underline cursor-pointer">Aave governance forum</span> for updates.
               </div>
             </div>

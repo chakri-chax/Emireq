@@ -1,43 +1,28 @@
 const { ethers } = require("hardhat");
-const fs = require("fs");
 
 async function main() {
-    [deployer, user1, user2] = await ethers.getSigners();
-    console.log("Deploying with account:", deployer.address);
-    
-    // Test constants
-    const USDC_DECIMALS = 6;
-    const WETH_DECIMALS = 18;
-    const USDT_DECIMALS = 6;
-    const DAI_DECIMALS = 18;
-    const WBTC_DECIMALS = 8;
-    const PRICE_DECIMALS = 8;
+  const [deployer] = await ethers.getSigners();
+  console.log("Deploying with account:", deployer.address);
+  console.log("ETH balance:", ethers.formatEther(await ethers.provider.getBalance(deployer.address)));
 
-    const parseUSDC = (amount) => ethers.parseUnits(amount, USDC_DECIMALS);
-    const parseWETH = (amount) => ethers.parseUnits(amount, WETH_DECIMALS);
-    const parseUSDT = (amount) => ethers.parseUnits(amount, USDT_DECIMALS);
-    const parseDAI = (amount) => ethers.parseUnits(amount, DAI_DECIMALS);
-    const parseWBTC = (amount) => ethers.parseUnits(amount, WBTC_DECIMALS);
-    const parsePrice = (amount) => ethers.parseUnits(amount, PRICE_DECIMALS);
-    // Deploy Mock Tokens
-    const MockERC20 = await ethers.getContractFactory("MockERC20");
-    weth = await MockERC20.deploy("Wrapped Ether", "WETH", WETH_DECIMALS);
-    //   usdc = await MockERC20.deploy("USD Coin", "USDC", USDC_DECIMALS);
-    //   usdt = await MockERC20.deploy("Tether USD", "USDT", USDT_DECIMALS);
+  const WETH_DECIMALS = 18;
+  const parseWETH = (amount) => ethers.parseUnits(amount, WETH_DECIMALS);
 
-    console.log("weth target", weth.target);
+  const MockERC20 = await ethers.getContractFactory("MockERC20");
+  const weth = await MockERC20.deploy("Wrapped Ether", "WETH", WETH_DECIMALS);
+  await weth.waitForDeployment();
+  console.log("WETH deployed at:", weth.target);
 
-    await weth.connect(deployer).mint(deployer.address, parseWETH("1000"));
+  // Mint tokens
+  const mintTx = await weth.mint(deployer.address, parseWETH("1000"));
+  const receipt = await mintTx.wait();
+  console.log("Mint TX confirmed in block", receipt.blockNumber);
 
-    console.log("weth", await weth);
-    
-    console.log("weth balance", await weth.balanceOf(deployer.address));
-    
+  const bal = await weth.balanceOf(deployer.address);
+  console.log("WETH balance:", ethers.formatUnits(bal, WETH_DECIMALS));
 }
 
-main()
-  .then(() => process.exit(0))
-  .catch((error) => {
-    console.error(error);
-    process.exit(1);
-  });
+main().catch((error) => {
+  console.error(error);
+  process.exitCode = 1;
+});
