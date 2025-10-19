@@ -5,7 +5,6 @@ require("@nomicfoundation/hardhat-toolbox");
 require("dotenv").config();
 
 let accounts = [process.env.PRIVATE_KEY,process.env.PRIVATE_KEY_2];
-console.log("accounts", accounts);
 
 /** @type import('hardhat/config').HardhatUserConfig */
 module.exports = {
