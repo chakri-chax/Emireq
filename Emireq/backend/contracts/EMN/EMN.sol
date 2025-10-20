@@ -12,15 +12,22 @@ contract EminarToken is ERC20, ERC20Permit, ERC20Votes, AccessControl, Pausable 
     using SafeERC20 for IERC20;
 
     bytes32 public constant MINTER_ROLE = keccak256("MINTER_ROLE");
+    bytes32 public constant BURNER_ROLE = keccak256("BURNER_ROLE");
     bytes32 public constant PAUSER_ROLE = keccak256("PAUSER_ROLE");
     bytes32 public constant GOVERNANCE_ROLE = keccak256("GOVERNANCE_ROLE");
     bytes32 public constant BACKING_MANAGER_ROLE = keccak256("BACKING_MANAGER_ROLE");
     bytes32 public constant RECOVERY_ROLE = keccak256("RECOVERY_ROLE");
 
-    uint256 public constant TOTAL_SUPPLY = 100_000_000 * 10**18;
+    uint256 public constant INITIAL_SUPPLY = 100_000_000 * 10**18;
+    uint256 public constant MAX_SUPPLY = 1_000_000_000 * 10**18; 
 
     enum BackingAsset { GOLD, SILVER, RARE }
-    struct AssetInfo { IERC20 token; uint256 amount; uint256 priceUSD; bool registered; }
+    struct AssetInfo { 
+        IERC20 token; 
+        uint256 amount; 
+        uint256 priceUSD; 
+        bool registered; 
+    }
 
     mapping(BackingAsset => AssetInfo) private _assets;
     address public reserveAddress;
@@ -33,6 +40,8 @@ contract EminarToken is ERC20, ERC20Permit, ERC20Votes, AccessControl, Pausable 
     event BackingDeposited(BackingAsset indexed asset, address indexed from, uint256 amount);
     event BackingWithdrawn(BackingAsset indexed asset, address indexed to, uint256 amount);
     event AssetPriceUpdated(BackingAsset indexed asset, uint256 priceUSD);
+    event TokensMinted(address indexed to, uint256 amount, string reason);
+    event TokensBurned(address indexed from, uint256 amount, string reason);
     
     constructor(
         string memory name_,
@@ -53,16 +62,57 @@ contract EminarToken is ERC20, ERC20Permit, ERC20Votes, AccessControl, Pausable 
 
         _grantRole(DEFAULT_ADMIN_ROLE, msg.sender);
         _grantRole(MINTER_ROLE, msg.sender);
+        _grantRole(BURNER_ROLE, msg.sender);
         _grantRole(PAUSER_ROLE, msg.sender);
         _grantRole(BACKING_MANAGER_ROLE, msg.sender);
         _grantRole(GOVERNANCE_ROLE, governanceMultisig_);
         _grantRole(RECOVERY_ROLE, msg.sender);
 
-        _mint(publicAddress, (TOTAL_SUPPLY * 40) / 100);
-        _mint(reserveAddress, (TOTAL_SUPPLY * 20) / 100);
-        _mint(developmentAddress, (TOTAL_SUPPLY * 20) / 100);
-        _mint(shariaTrustAddress, (TOTAL_SUPPLY * 10) / 100);
-        _mint(strategicPartnersAddress, (TOTAL_SUPPLY * 10) / 100);
+        _mint(publicAddress, (INITIAL_SUPPLY * 40) / 100);
+        _mint(reserveAddress, (INITIAL_SUPPLY * 20) / 100);
+        _mint(developmentAddress, (INITIAL_SUPPLY * 20) / 100);
+        _mint(shariaTrustAddress, (INITIAL_SUPPLY * 10) / 100);
+        _mint(strategicPartnersAddress, (INITIAL_SUPPLY * 10) / 100);
+    }
+
+    // Mint functionality
+    function mint(address to, uint256 amount, string memory reason) 
+        external 
+        onlyRole(MINTER_ROLE) 
+        whenNotPaused 
+    {
+        require(to != address(0), "mint to zero address");
+        require(amount > 0, "zero amount");
+        require(totalSupply() + amount <= MAX_SUPPLY, "exceeds max supply");
+        
+        _mint(to, amount);
+        emit TokensMinted(to, amount, reason);
+    }
+
+    // Burn functionality
+    function burn(address from, uint256 amount, string memory reason) 
+        external 
+        onlyRole(BURNER_ROLE) 
+        whenNotPaused 
+    {
+        require(from != address(0), "burn from zero address");
+        require(amount > 0, "zero amount");
+        require(balanceOf(from) >= amount, "insufficient balance");
+        
+        _burn(from, amount);
+        emit TokensBurned(from, amount, reason);
+    }
+
+    // Allow users to burn their own tokens
+    function burnMyTokens(uint256 amount, string memory reason) 
+        external 
+        whenNotPaused 
+    {
+        require(amount > 0, "zero amount");
+        require(balanceOf(msg.sender) >= amount, "insufficient balance");
+        
+        _burn(msg.sender, amount);
+        emit TokensBurned(msg.sender, amount, reason);
     }
 
     function registerBackingToken(BackingAsset asset, address token) external onlyRole(BACKING_MANAGER_ROLE) {
@@ -109,17 +159,19 @@ contract EminarToken is ERC20, ERC20Permit, ERC20Votes, AccessControl, Pausable 
     function backingPerTokenUSD() external view returns (uint256) {
         uint256 totalVal = totalBackingValueUSD();
         if(totalVal == 0) return 0;
-        return (totalVal * (10**18)) / TOTAL_SUPPLY;
+        return (totalVal * (10**18)) / totalSupply();
+    }
+
+    function getAssetInfo(BackingAsset asset) external view returns (AssetInfo memory) {
+        return _assets[asset];
     }
 
     function pause() external onlyRole(PAUSER_ROLE) {
         _pause();
-        emit Paused(msg.sender);
     }
 
     function unpause() external onlyRole(PAUSER_ROLE) {
         _unpause();
-        emit Unpaused(msg.sender);
     }
 
     function emergencyRecoverERC20(address token, address to, uint256 amount) external onlyRole(RECOVERY_ROLE) {
