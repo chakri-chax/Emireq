@@ -47,6 +47,9 @@ module.exports = {
     enabled: process.env.REPORT_GAS === "true",
     currency: "USD",
   },
+  sourcify:{
+    enabled:true
+  },
   mocha: {
     timeout: 40000
   }
