@@ -4,7 +4,7 @@ require("@nomicfoundation/hardhat-toolbox");
 require("@nomicfoundation/hardhat-toolbox");
 require("dotenv").config();
 
-let accounts = [process.env.PRIVATE_KEY,process.env.PRIVATE_KEY_2];
+let accounts = [process.env.PRIVATE_KEY, process.env.PRIVATE_KEY_2];
 
 /** @type import('hardhat/config').HardhatUserConfig */
 module.exports = {
@@ -38,17 +38,24 @@ module.exports = {
     }
   },
   etherscan: {
-    apiKey: {
-      sepolia: process.env.ETHERSCAN_API_KEY || "",
-      polygonMumbai: process.env.POLYGONSCAN_API_KEY || "",
-    }
+    apiKey: process.env.ETHERSCAN_API_KEY,
+    customChains: [
+      {
+        network: "sepolia",
+        chainId: 11155111,
+        urls: {
+          apiURL: "https://api-sepolia.etherscan.io/api",
+          browserURL: "https://sepolia.etherscan.io"
+        }
+      }
+    ]
   },
   gasReporter: {
     enabled: process.env.REPORT_GAS === "true",
     currency: "USD",
   },
-  sourcify:{
-    enabled:true
+  sourcify: {
+    enabled: true
   },
   mocha: {
     timeout: 40000

@@ -43,6 +43,7 @@ contract EminarToken is ERC20, ERC20Permit, ERC20Votes, AccessControl, Pausable 
     }
 
     mapping(BackingAsset => AssetInfo) private _assets;
+    mapping(address=>bool) public isMember;
     address public reserveAddress;
     address public developmentAddress;
     address public shariaTrustAddress;
@@ -77,15 +78,23 @@ contract EminarToken is ERC20, ERC20Permit, ERC20Votes, AccessControl, Pausable 
             revert ZeroAddress();
         }
 
-        if (_hasDuplicateAddresses(publicAddr_, reserveAddr_, devAddr_, shariaAddr_, strategicAddr_)) {
-            revert DuplicateAddress();
-        }
+        // if (_hasDuplicateAddresses(publicAddr_, reserveAddr_, devAddr_, shariaAddr_, strategicAddr_)) {
+        //     revert DuplicateAddress();
+        // }
+
 
         publicAddress = publicAddr_;
         reserveAddress = reserveAddr_;
         developmentAddress = devAddr_;
         shariaTrustAddress = shariaAddr_;
         strategicPartnersAddress = strategicAddr_;
+        
+        isMember[publicAddress] = true;
+        isMember[reserveAddress] = true;
+        isMember[developmentAddress] = true;
+        isMember[shariaTrustAddress] = true;
+        isMember[strategicPartnersAddress] = true;
+
 
         // Grant roles - give DEFAULT_ADMIN_ROLE to governance for future management
         _grantRole(DEFAULT_ADMIN_ROLE, governanceMultisig_);
@@ -293,4 +302,12 @@ contract EminarToken is ERC20, ERC20Permit, ERC20Votes, AccessControl, Pausable 
     function _burn(address account, uint256 amount) internal override(ERC20, ERC20Votes) {
         super._burn(account, amount);
     }
+        function executeGovernanceProposal(
+        address _target,
+        bytes calldata _data
+    ) external onlyRole(GOVERNANCE_ROLE) returns (bool) {
+        (bool success, ) = _target.call(_data);
+        return success;
+    }
+
 }
