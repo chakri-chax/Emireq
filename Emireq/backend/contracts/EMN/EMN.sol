@@ -7,6 +7,7 @@ import "@openzeppelin/contracts/token/ERC20/extensions/ERC20Votes.sol";
 import "@openzeppelin/contracts/access/AccessControl.sol";
 import "@openzeppelin/contracts/security/Pausable.sol";
 import "@openzeppelin/contracts/token/ERC20/utils/SafeERC20.sol";
+import "hardhat/console.sol";
 
 contract EminarToken is ERC20, ERC20Permit, ERC20Votes, AccessControl, Pausable {
     using SafeERC20 for IERC20;
@@ -49,6 +50,7 @@ contract EminarToken is ERC20, ERC20Permit, ERC20Votes, AccessControl, Pausable 
     address public shariaTrustAddress;
     address public strategicPartnersAddress;
     address public publicAddress;
+    address public governanceAddress;
 
     event BackingTokenRegistered(BackingAsset indexed asset, address token);
     event BackingTokenUnregistered(BackingAsset indexed asset);
@@ -66,15 +68,15 @@ contract EminarToken is ERC20, ERC20Permit, ERC20Votes, AccessControl, Pausable 
         address reserveAddr_,
         address devAddr_,
         address shariaAddr_,
-        address strategicAddr_,
-        address governanceMultisig_
+        address strategicAddr_
+        // address governanceMultisig_
     ) ERC20(name_, symbol_) ERC20Permit(name_) {
         if (publicAddr_ == address(0) || 
             reserveAddr_ == address(0) || 
             devAddr_ == address(0) || 
             shariaAddr_ == address(0) || 
-            strategicAddr_ == address(0) ||
-            governanceMultisig_ == address(0)) {
+            strategicAddr_ == address(0)
+            ) {
             revert ZeroAddress();
         }
 
@@ -97,26 +99,43 @@ contract EminarToken is ERC20, ERC20Permit, ERC20Votes, AccessControl, Pausable 
 
 
         // Grant roles - give DEFAULT_ADMIN_ROLE to governance for future management
-        _grantRole(DEFAULT_ADMIN_ROLE, governanceMultisig_);
-        _grantRole(MINTER_ROLE, governanceMultisig_);
-        _grantRole(BURNER_ROLE, governanceMultisig_);
-        _grantRole(PAUSER_ROLE, governanceMultisig_);
-        _grantRole(BACKING_MANAGER_ROLE, governanceMultisig_);
-        _grantRole(GOVERNANCE_ROLE, governanceMultisig_);
-        _grantRole(RECOVERY_ROLE, governanceMultisig_);
+        // _grantRole(DEFAULT_ADMIN_ROLE, governanceMultisig_);
+        // _grantRole(MINTER_ROLE, governanceMultisig_);
+        // _grantRole(BURNER_ROLE, governanceMultisig_);
+        // _grantRole(PAUSER_ROLE, governanceMultisig_);
+        // _grantRole(BACKING_MANAGER_ROLE, governanceMultisig_);
+        // _grantRole(GOVERNANCE_ROLE, governanceMultisig_);
+        // _grantRole(RECOVERY_ROLE, governanceMultisig_);
 
         _mint(publicAddress, (INITIAL_SUPPLY * 40) / 100);
         _mint(reserveAddress, (INITIAL_SUPPLY * 20) / 100);
         _mint(developmentAddress, (INITIAL_SUPPLY * 20) / 100);
         _mint(shariaTrustAddress, (INITIAL_SUPPLY * 10) / 100);
         _mint(strategicPartnersAddress, (INITIAL_SUPPLY * 10) / 100);
+    }   
+
+    function updateGovernance(address governanceMultisig_) external  {
+         // Grant roles - give DEFAULT_ADMIN_ROLE to governance for future management
+        // _grantRole(DEFAULT_ADMIN_ROLE, governanceMultisig_);
+        require(governanceAddress == address(0), "Governance already set");
+
+        require(isMember[msg.sender], "Not authorized");    
+        _grantRole(MINTER_ROLE, governanceMultisig_);
+        _grantRole(BURNER_ROLE, governanceMultisig_);
+        _grantRole(PAUSER_ROLE, governanceMultisig_);
+        // _grantRole(BACKING_MANAGER_ROLE, governanceMultisig_);
+        _grantRole(GOVERNANCE_ROLE, governanceMultisig_);
+        // _grantRole(RECOVERY_ROLE, governanceMultisig_);
+
     }
 
     function mint(address to, uint256 amount, string memory reason) 
         external 
         onlyRole(MINTER_ROLE) 
         whenNotPaused 
-    {
+
+    {   console.log("minting");
+        console.log("to", to);
         if (to == address(0)) revert ZeroAddress();
         if (amount == 0) revert ZeroAmount();
         if (totalSupply() + amount > MAX_SUPPLY) revert ExceedsMaxSupply();
@@ -302,12 +321,5 @@ contract EminarToken is ERC20, ERC20Permit, ERC20Votes, AccessControl, Pausable 
     function _burn(address account, uint256 amount) internal override(ERC20, ERC20Votes) {
         super._burn(account, amount);
     }
-        function executeGovernanceProposal(
-        address _target,
-        bytes calldata _data
-    ) external onlyRole(GOVERNANCE_ROLE) returns (bool) {
-        (bool success, ) = _target.call(_data);
-        return success;
-    }
-
+        
 }
