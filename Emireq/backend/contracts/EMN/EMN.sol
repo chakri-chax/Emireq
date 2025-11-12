@@ -117,15 +117,15 @@ contract EminarToken is ERC20, ERC20Permit, ERC20Votes, AccessControl, Pausable 
     function updateGovernance(address governanceMultisig_) external  {
          // Grant roles - give DEFAULT_ADMIN_ROLE to governance for future management
         // _grantRole(DEFAULT_ADMIN_ROLE, governanceMultisig_);
-        require(governanceAddress == address(0), "Governance already set");
+        require(governanceAddress == address(0) || msg.sender == governanceAddress, "Governance already set");
 
         require(isMember[msg.sender], "Not authorized");    
         _grantRole(MINTER_ROLE, governanceMultisig_);
         _grantRole(BURNER_ROLE, governanceMultisig_);
         _grantRole(PAUSER_ROLE, governanceMultisig_);
-        // _grantRole(BACKING_MANAGER_ROLE, governanceMultisig_);
+        _grantRole(BACKING_MANAGER_ROLE, governanceMultisig_);
         _grantRole(GOVERNANCE_ROLE, governanceMultisig_);
-        // _grantRole(RECOVERY_ROLE, governanceMultisig_);
+        _grantRole(RECOVERY_ROLE, governanceMultisig_);
 
     }
 
@@ -134,8 +134,7 @@ contract EminarToken is ERC20, ERC20Permit, ERC20Votes, AccessControl, Pausable 
         onlyRole(MINTER_ROLE) 
         whenNotPaused 
 
-    {   console.log("minting");
-        console.log("to", to);
+    {   
         if (to == address(0)) revert ZeroAddress();
         if (amount == 0) revert ZeroAmount();
         if (totalSupply() + amount > MAX_SUPPLY) revert ExceedsMaxSupply();
@@ -157,16 +156,7 @@ contract EminarToken is ERC20, ERC20Permit, ERC20Votes, AccessControl, Pausable 
         emit TokensBurned(from, amount, reason);
     }
 
-    function burnMyTokens(uint256 amount, string memory reason) 
-        external 
-        whenNotPaused 
-    {
-        if (amount == 0) revert ZeroAmount();
-        if (balanceOf(msg.sender) < amount) revert InsufficientBalance();
-        
-        _burn(msg.sender, amount);
-        emit TokensBurned(msg.sender, amount, reason);
-    }
+  
 
     function registerBackingToken(BackingAsset asset, address token) external onlyRole(BACKING_MANAGER_ROLE) {
         if (token == address(0)) revert ZeroAddress();

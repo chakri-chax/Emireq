@@ -290,12 +290,15 @@ contract EmireqGovernance is AccessControl, Pausable {
         proposal.status = ProposalStatus.EXECUTED;
         console.log("proposal.targetContract", proposal.targetContract);
         // Execute the proposal through the token's governance function
-       
-        (bool success, ) = (proposal.targetContract).call{value: 0}(
+
+        (bool success, bytes memory result) = proposal.targetContract.call(
             proposal.callData
         );
-        if (!success) revert ExecutionFailed();
-
+        if (!success) {
+            assembly {
+                revert(add(result, 32), mload(result))
+            }
+        }
         emit ProposalExecuted(_proposalId);
     }
 

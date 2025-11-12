@@ -62,13 +62,7 @@ async function main() {
     let hasGovernanceRole = await emn.hasRole(GOVERNANCE_ROLE, emireqGovernance.target);
     console.log("hasGovernanceRole", hasGovernanceRole);
 
-    // create proposal
-    //    ProposalType _proposalType,
-    //         string memory _title,
-    //         string memory _description,
-    //         bytes memory _callData,
-    //         address _targetContract,
-    //         uint256 _votingPeriod
+
     const action = encodeMintCall(tenant.address, 1000, "Proposal 1 description");
 
 
@@ -143,8 +137,12 @@ async function main() {
 
 
     // checking balance of tenant
-     tenantBal = await emn.balanceOf(tenant.address);
+    tenantBal = await emn.balanceOf(tenant.address);
     console.log("Tenant balance after:", tenantBal);
+
+
+    
+
 }
 
 main()
