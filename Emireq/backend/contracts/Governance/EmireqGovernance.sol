@@ -6,17 +6,14 @@ import "@openzeppelin/contracts/security/Pausable.sol";
 import "@openzeppelin/contracts/utils/Counters.sol";
 import "@openzeppelin/contracts/token/ERC20/IERC20.sol";
 import {EminarToken} from "../EMN/EMN.sol";
-import "hardhat/console.sol";
 
 contract EmireqGovernance is AccessControl, Pausable {
     using Counters for Counters.Counter;
 
-    // Roles
     bytes32 public constant PROPOSER_ROLE = keccak256("PROPOSER_ROLE");
     bytes32 public constant EXECUTOR_ROLE = keccak256("EXECUTOR_ROLE");
     bytes32 public constant PAUSER_ROLE = keccak256("PAUSER_ROLE");
 
-    // Custom Errors
     error ZeroAddress();
     error ZeroAmount();
     error InvalidProposal();
@@ -30,7 +27,6 @@ contract EmireqGovernance is AccessControl, Pausable {
     error InvalidParameter();
     error ExecutionFailed();
 
-    // Proposal Types
     enum ProposalType {
         TOKEN_MINTING,
         FEE_ADJUSTMENT,
@@ -41,7 +37,6 @@ contract EmireqGovernance is AccessControl, Pausable {
         ADDRESS_UPDATE
     }
 
-    // Proposal Status
     enum ProposalStatus {
         PENDING,
         ACTIVE,
@@ -51,7 +46,6 @@ contract EmireqGovernance is AccessControl, Pausable {
         EXPIRED
     }
 
-    // Proposal Structure
     struct Proposal {
         uint256 id;
         ProposalType proposalType;
@@ -69,28 +63,24 @@ contract EmireqGovernance is AccessControl, Pausable {
         mapping(address => bool) approvals;
     }
 
-    // Governance Parameters
     uint256 public constant MIN_VOTING_PERIOD = 1 days;
     uint256 public constant MAX_VOTING_PERIOD = 30 days;
     uint256 public constant REQUIRED_APPROVALS = 3; // 3/5 votes
     uint256 public constant TOTAL_VOTERS = 5;
 
-    // State Variables
     Counters.Counter private _proposalIds;
     EminarToken public emnToken;
 
-    // Multisig Voters (5 parties)
     address public publicAddress;
     address public reserveAddress;
     address public developmentAddress;
     address public shariaTrustAddress;
     address public strategicPartnersAddress;
-    address public multisiGovernanceAddress;
+
 
     mapping(uint256 => Proposal) public proposals;
     mapping(address => uint256) public lastProposalTimestamp;
 
-    // Events
     event ProposalCreated(
         uint256 indexed proposalId,
         ProposalType proposalType,
@@ -116,7 +106,6 @@ contract EmireqGovernance is AccessControl, Pausable {
 
         emnToken = EminarToken(_emnToken);
 
-        // Set voter addresses from the token contract
         publicAddress = emnToken.publicAddress();
         reserveAddress = emnToken.reserveAddress();
         developmentAddress = emnToken.developmentAddress();
@@ -130,17 +119,11 @@ contract EmireqGovernance is AccessControl, Pausable {
         _grantRole(PROPOSER_ROLE, shariaTrustAddress);
         _grantRole(PROPOSER_ROLE, strategicPartnersAddress);
 
-        _grantRole(EXECUTOR_ROLE, publicAddress);
-        _grantRole(EXECUTOR_ROLE, reserveAddress);
-        _grantRole(EXECUTOR_ROLE, developmentAddress);
-        _grantRole(EXECUTOR_ROLE, shariaTrustAddress);
-        _grantRole(EXECUTOR_ROLE, strategicPartnersAddress);
-
-        _grantRole(PAUSER_ROLE, publicAddress);
-        _grantRole(PAUSER_ROLE, reserveAddress);
-        _grantRole(PAUSER_ROLE, developmentAddress);
-        _grantRole(PAUSER_ROLE, shariaTrustAddress);
-        _grantRole(PAUSER_ROLE, strategicPartnersAddress);
+       _grantRole(EXECUTOR_ROLE, publicAddress);
+       _grantRole(EXECUTOR_ROLE, reserveAddress);
+       _grantRole(EXECUTOR_ROLE, developmentAddress);
+       _grantRole(EXECUTOR_ROLE, shariaTrustAddress);
+       _grantRole(EXECUTOR_ROLE, strategicPartnersAddress);
     }
 
     /**
@@ -207,7 +190,6 @@ contract EmireqGovernance is AccessControl, Pausable {
         newProposal.callData = _callData;
         newProposal.targetContract = _targetContract;
         newProposal.earlyExecution = _earlyExecution;
-        // Auto-approve by proposer
         newProposal.approvals[msg.sender] = true;
         newProposal.approvalCount = 1;
 
@@ -288,7 +270,6 @@ contract EmireqGovernance is AccessControl, Pausable {
 
         proposal.executed = true;
         proposal.status = ProposalStatus.EXECUTED;
-        console.log("proposal.targetContract", proposal.targetContract);
         // Execute the proposal through the token's governance function
 
         (bool success, bytes memory result) = proposal.targetContract.call(
@@ -401,273 +382,6 @@ contract EmireqGovernance is AccessControl, Pausable {
      */
     function isVoter(address _address) external view returns (bool) {
         return _isVoter(_address);
-    }
-
-    // Proposal Creation Helper Functions
-
-    /**
-     * @notice Create token minting proposal
-     */
-    function createTokenMintingProposal(
-        string memory _title,
-        string memory _description,
-        address _to,
-        uint256 _amount,
-        string memory _reason,
-        uint256 _votingPeriod,
-        bool _earlyExecution
-    ) external onlyVoter onlyRole(PROPOSER_ROLE) returns (uint256) {
-        bytes memory callData = abi.encodeWithSignature(
-            "mint(address,uint256,string)",
-            _to,
-            _amount,
-            _reason
-        );
-
-        return
-            propose(
-                ProposalType.TOKEN_MINTING,
-                _title,
-                _description,
-                callData,
-                address(emnToken),
-                _votingPeriod,
-                _earlyExecution
-            );
-    }
-
-    /**
-     * @notice Create treasury spending proposal
-     */
-    function createTreasurySpendingProposal(
-        string memory _title,
-        string memory _description,
-        address _token,
-        address _to,
-        uint256 _amount,
-        uint256 _votingPeriod,
-        bool _earlyExecution
-    ) external onlyVoter onlyRole(PROPOSER_ROLE) returns (uint256) {
-        bytes memory callData = abi.encodeWithSignature(
-            "transfer(address,uint256)",
-            _to,
-            _amount
-        );
-
-        return
-            propose(
-                ProposalType.TREASURY_SPENDING,
-                _title,
-                _description,
-                callData,
-                _token,
-                _votingPeriod,
-                _earlyExecution
-            );
-    }
-
-    /**
-     * @notice Create asset policy proposal (enable/disable asset)
-     */
-    function createAssetPolicyProposal(
-        string memory _title,
-        string memory _description,
-        EminarToken.BackingAsset _asset,
-        address _token,
-        bool _register,
-        uint256 _votingPeriod,
-        bool _earlyExecution
-    ) external onlyVoter onlyRole(PROPOSER_ROLE) returns (uint256) {
-        bytes memory callData;
-
-        if (_register) {
-            callData = abi.encodeWithSignature(
-                "registerBackingToken(uint8,address)",
-                _asset,
-                _token
-            );
-        } else {
-            callData = abi.encodeWithSignature(
-                "unregisterBackingToken(uint8)",
-                _asset
-            );
-        }
-
-        return
-            propose(
-                ProposalType.ASSET_POLICY,
-                _title,
-                _description,
-                callData,
-                address(emnToken),
-                _votingPeriod,
-                _earlyExecution
-            );
-    }
-
-    /**
-     * @notice Create oracle price feed update proposal
-     */
-    function createOraclePriceProposal(
-        string memory _title,
-        string memory _description,
-        EminarToken.BackingAsset _asset,
-        uint256 _priceUSD,
-        uint256 _votingPeriod,
-        bool _earlyExecution
-    ) external onlyVoter onlyRole(PROPOSER_ROLE) returns (uint256) {
-        bytes memory callData = abi.encodeWithSignature(
-            "setAssetPriceUSD(uint8,uint256)",
-            _asset,
-            _priceUSD
-        );
-
-        return
-            propose(
-                ProposalType.ORACLE_PRICE_FEED,
-                _title,
-                _description,
-                callData,
-                address(emnToken),
-                _votingPeriod,
-                _earlyExecution
-            );
-    }
-
-    /**
-     * @notice Create address update proposal
-     */
-    function createAddressUpdateProposal(
-        string memory _title,
-        string memory _description,
-        string memory _addressType,
-        address _newAddress,
-        uint256 _votingPeriod,
-        bool _earlyExecution
-    ) external onlyVoter onlyRole(PROPOSER_ROLE) returns (uint256) {
-        bytes4 selector;
-
-        if (
-            keccak256(abi.encodePacked(_addressType)) ==
-            keccak256(abi.encodePacked("PUBLIC"))
-        ) {
-            selector = bytes4(keccak256("updatePublicAddress(address)"));
-        } else if (
-            keccak256(abi.encodePacked(_addressType)) ==
-            keccak256(abi.encodePacked("RESERVE"))
-        ) {
-            selector = bytes4(keccak256("updateReserveAddress(address)"));
-        } else if (
-            keccak256(abi.encodePacked(_addressType)) ==
-            keccak256(abi.encodePacked("DEVELOPMENT"))
-        ) {
-            selector = bytes4(keccak256("updateDevelopmentAddress(address)"));
-        } else {
-            revert InvalidParameter();
-        }
-
-        bytes memory callData = abi.encodeWithSelector(selector, _newAddress);
-
-        return
-            propose(
-                ProposalType.ADDRESS_UPDATE,
-                _title,
-                _description,
-                callData,
-                address(emnToken),
-                _votingPeriod,
-                _earlyExecution
-            );
-    }
-
-    /**
-     * @notice Create backing withdrawal proposal
-     */
-    function createBackingWithdrawalProposal(
-        string memory _title,
-        string memory _description,
-        EminarToken.BackingAsset _asset,
-        address _to,
-        uint256 _amount,
-        uint256 _votingPeriod,
-        bool _earlyExecution
-    ) external onlyVoter onlyRole(PROPOSER_ROLE) returns (uint256) {
-        bytes memory callData = abi.encodeWithSignature(
-            "withdrawBacking(uint8,address,uint256)",
-            _asset,
-            _to,
-            _amount
-        );
-
-        return
-            propose(
-                ProposalType.TREASURY_SPENDING,
-                _title,
-                _description,
-                callData,
-                address(emnToken),
-                _votingPeriod,
-                _earlyExecution
-            );
-    }
-
-    // Administrative Functions
-
-    /**
-     * @notice Update voter addresses (must be executed through governance)
-     */
-    function updateVoterAddress(
-        string memory _voterType,
-        address _newAddress
-    ) external onlyRole(EXECUTOR_ROLE) {
-        if (_newAddress == address(0)) revert ZeroAddress();
-
-        address oldAddress;
-
-        if (
-            keccak256(abi.encodePacked(_voterType)) ==
-            keccak256(abi.encodePacked("PUBLIC"))
-        ) {
-            oldAddress = publicAddress;
-            publicAddress = _newAddress;
-        } else if (
-            keccak256(abi.encodePacked(_voterType)) ==
-            keccak256(abi.encodePacked("RESERVE"))
-        ) {
-            oldAddress = reserveAddress;
-            reserveAddress = _newAddress;
-        } else if (
-            keccak256(abi.encodePacked(_voterType)) ==
-            keccak256(abi.encodePacked("DEVELOPMENT"))
-        ) {
-            oldAddress = developmentAddress;
-            developmentAddress = _newAddress;
-        } else if (
-            keccak256(abi.encodePacked(_voterType)) ==
-            keccak256(abi.encodePacked("SHARIA"))
-        ) {
-            oldAddress = shariaTrustAddress;
-            shariaTrustAddress = _newAddress;
-        } else if (
-            keccak256(abi.encodePacked(_voterType)) ==
-            keccak256(abi.encodePacked("STRATEGIC"))
-        ) {
-            oldAddress = strategicPartnersAddress;
-            strategicPartnersAddress = _newAddress;
-        } else {
-            revert InvalidParameter();
-        }
-
-        // Update roles
-        _revokeRole(PROPOSER_ROLE, oldAddress);
-        _revokeRole(EXECUTOR_ROLE, oldAddress);
-        _revokeRole(PAUSER_ROLE, oldAddress);
-
-        _grantRole(PROPOSER_ROLE, _newAddress);
-        _grantRole(EXECUTOR_ROLE, _newAddress);
-        _grantRole(PAUSER_ROLE, _newAddress);
-
-        emit VoterUpdated(_voterType, _newAddress);
     }
 
     function pause() external onlyRole(PAUSER_ROLE) {

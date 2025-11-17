@@ -12,7 +12,6 @@ import "hardhat/console.sol";
 contract EminarToken is ERC20, ERC20Permit, ERC20Votes, AccessControl, Pausable {
     using SafeERC20 for IERC20;
 
-    // Custom Errors
     error ZeroAddress();
     error ZeroAmount();
     error ExceedsMaxSupply();
@@ -22,6 +21,7 @@ contract EminarToken is ERC20, ERC20Permit, ERC20Votes, AccessControl, Pausable 
     error DuplicateAddress();
     error InvalidPrice();
     error InvalidAsset();
+    error InValidFee();
 
     bytes32 public constant MINTER_ROLE = keccak256("MINTER_ROLE");
     bytes32 public constant BURNER_ROLE = keccak256("BURNER_ROLE");
@@ -52,6 +52,7 @@ contract EminarToken is ERC20, ERC20Permit, ERC20Votes, AccessControl, Pausable 
     address public publicAddress;
     address public governanceAddress;
 
+    uint8 public transactionFee; 
     event BackingTokenRegistered(BackingAsset indexed asset, address token);
     event BackingTokenUnregistered(BackingAsset indexed asset);
     event BackingDeposited(BackingAsset indexed asset, address indexed from, uint256 amount);
@@ -68,8 +69,8 @@ contract EminarToken is ERC20, ERC20Permit, ERC20Votes, AccessControl, Pausable 
         address reserveAddr_,
         address devAddr_,
         address shariaAddr_,
-        address strategicAddr_
-        // address governanceMultisig_
+        address strategicAddr_,
+        uint8 txFee
     ) ERC20(name_, symbol_) ERC20Permit(name_) {
         if (publicAddr_ == address(0) || 
             reserveAddr_ == address(0) || 
@@ -79,10 +80,12 @@ contract EminarToken is ERC20, ERC20Permit, ERC20Votes, AccessControl, Pausable 
             ) {
             revert ZeroAddress();
         }
-
-        // if (_hasDuplicateAddresses(publicAddr_, reserveAddr_, devAddr_, shariaAddr_, strategicAddr_)) {
-        //     revert DuplicateAddress();
-        // }
+        if(txFee > 100) {
+            revert InValidFee();
+        }
+        if (_hasDuplicateAddresses(publicAddr_, reserveAddr_, devAddr_, shariaAddr_, strategicAddr_)) {
+            revert DuplicateAddress();
+        }
 
 
         publicAddress = publicAddr_;
@@ -97,16 +100,8 @@ contract EminarToken is ERC20, ERC20Permit, ERC20Votes, AccessControl, Pausable 
         isMember[shariaTrustAddress] = true;
         isMember[strategicPartnersAddress] = true;
 
-
-        // Grant roles - give DEFAULT_ADMIN_ROLE to governance for future management
-        // _grantRole(DEFAULT_ADMIN_ROLE, governanceMultisig_);
-        // _grantRole(MINTER_ROLE, governanceMultisig_);
-        // _grantRole(BURNER_ROLE, governanceMultisig_);
-        // _grantRole(PAUSER_ROLE, governanceMultisig_);
-        // _grantRole(BACKING_MANAGER_ROLE, governanceMultisig_);
-        // _grantRole(GOVERNANCE_ROLE, governanceMultisig_);
-        // _grantRole(RECOVERY_ROLE, governanceMultisig_);
-
+        transactionFee = txFee;
+       
         _mint(publicAddress, (INITIAL_SUPPLY * 40) / 100);
         _mint(reserveAddress, (INITIAL_SUPPLY * 20) / 100);
         _mint(developmentAddress, (INITIAL_SUPPLY * 20) / 100);
@@ -115,8 +110,7 @@ contract EminarToken is ERC20, ERC20Permit, ERC20Votes, AccessControl, Pausable 
     }   
 
     function updateGovernance(address governanceMultisig_) external  {
-         // Grant roles - give DEFAULT_ADMIN_ROLE to governance for future management
-        // _grantRole(DEFAULT_ADMIN_ROLE, governanceMultisig_);
+     
         require(governanceAddress == address(0) || msg.sender == governanceAddress, "Governance already set");
 
         require(isMember[msg.sender], "Not authorized");    
@@ -129,6 +123,13 @@ contract EminarToken is ERC20, ERC20Permit, ERC20Votes, AccessControl, Pausable 
 
     }
 
+
+    function updateTransactionFee(uint8 newFee) external onlyRole(GOVERNANCE_ROLE) {
+        if (newFee > 100) {
+            revert InValidFee();
+        }
+        transactionFee = newFee;
+    }
     function mint(address to, uint256 amount, string memory reason) 
         external 
         onlyRole(MINTER_ROLE) 
@@ -183,6 +184,7 @@ contract EminarToken is ERC20, ERC20Permit, ERC20Votes, AccessControl, Pausable 
         if (!_assets[asset].registered) revert AssetNotRegistered();
         if (amount == 0) revert ZeroAmount();
         
+        // console.log("Asset: ", _assets[asset].token);
         _assets[asset].token.safeTransferFrom(msg.sender, address(this), amount);
         _assets[asset].amount += amount;
         emit BackingDeposited(asset, msg.sender, amount);
