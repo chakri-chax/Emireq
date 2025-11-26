@@ -10,7 +10,7 @@ const ORACLE_ADDRESS = process.env.SEPOLIA_ORACLE_ADDRESS;
 const METAL_API_KEY = process.env.METAL_API_KEY;
 const POLL_INTERVAL_MS = 2 * 60 * 60 * 1000;
 const VOLATILITY_PERCENT = process.env.VOLATILITY_PERCENT ? parseFloat(process.env.VOLATILITY_PERCENT) : 1;
-
+let oraclePrices;
 const provider = new ethers.JsonRpcProvider(RPC_URL);
 const wallet = new ethers.Wallet(PRIVATE_KEY, provider);
 const abi = [
@@ -96,10 +96,15 @@ async function updatePricesOnce() {
     console.error("Failed to fetch API rates:", e.message || e);
     return;
   }
-
+oraclePrices = {
+  goldUsd: rates.goldUsd,
+  silverUsd: rates.silverUsd,
+  rareUsd: rates.rareUsd
+}
   const goldPrice = toUintDecimals8(rates.goldUsd);
   const silverPrice = toUintDecimals8(rates.silverUsd);
   const rarePrice = toUintDecimals8(rates.rareUsd);
+
 
   console.log("Prices in uint decimals(8):", {
     gold: goldPrice.toString(),
@@ -139,6 +144,6 @@ async function updatePricesOnce() {
 })();
 
 const app = express();
-app.get('/', (req, res) => res.send('Oracle price updater running'));
+app.get('/', (req, res) => res.send('Oracle price updater running', oraclePrices));
 const PORT = process.env.PORT || 3000;
 app.listen(PORT, () => console.log(`Listening on port ${PORT}`));
