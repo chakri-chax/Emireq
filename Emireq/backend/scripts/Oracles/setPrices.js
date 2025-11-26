@@ -144,6 +144,6 @@ oraclePrices = {
 })();
 
 const app = express();
-app.get('/tokenPrices', (req, res) => res.send('Oracle price updater running', oraclePrices));
+app.get('/tokenPrices', (req, res) => res.json(oraclePrices));
 const PORT = process.env.PORT || 3000;
 app.listen(PORT, () => console.log(`Listening on port ${PORT}`));
