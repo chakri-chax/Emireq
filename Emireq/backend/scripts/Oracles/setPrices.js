@@ -1,5 +1,7 @@
 require("dotenv").config();
 const axios = require("axios");
+const express = require('express');
+
 const { ethers } = require("hardhat");
 
 const RPC_URL = process.env.SEPOLIA_RPC_URL;
@@ -135,3 +137,8 @@ async function updatePricesOnce() {
     process.exit(1);
   }
 })();
+
+const app = express();
+app.get('/', (req, res) => res.send('Oracle price updater running'));
+const PORT = process.env.PORT || 3000;
+app.listen(PORT, () => console.log(`Listening on port ${PORT}`));
