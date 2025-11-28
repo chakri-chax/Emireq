@@ -153,7 +153,7 @@ oraclePrices = {
 })();
 
 // Cron schedule: every 2 hours
-cron.schedule("*/2 * * * *", async () => {
+cron.schedule("0 */2 * * *", async () => {
   console.log("Running 2-hour cron job...");
   try {
     await updatePricesOnce();
