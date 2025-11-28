@@ -1,6 +1,7 @@
 require("dotenv").config();
 const axios = require("axios");
 const express = require('express');
+const cron = require("node-cron");
 
 const { ethers } = require("hardhat");
 
@@ -133,15 +134,33 @@ oraclePrices = {
   }
 }
 
-(async function main() {
+// (async function main() {
+//   try {
+//     await updatePricesOnce();
+//     setInterval(updatePricesOnce, POLL_INTERVAL_MS);
+//   } catch (e) {
+//     console.error(e);
+//     process.exit(1);
+//   }
+// })();
+
+(async () => {
   try {
     await updatePricesOnce();
-    setInterval(updatePricesOnce, POLL_INTERVAL_MS);
   } catch (e) {
-    console.error(e);
-    process.exit(1);
+    console.error("Initial update failed:", e.message);
   }
 })();
+
+// Cron schedule: every 2 hours
+cron.schedule("*/2 * * * *", async () => {
+  console.log("Running 2-hour cron job...");
+  try {
+    await updatePricesOnce();
+  } catch (e) {
+    console.error("Cron job failed:", e.message);
+  }
+});
 
 const app = express();
 app.get('/tokenPrices', (req, res) => res.json(oraclePrices));
