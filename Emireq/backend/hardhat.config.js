@@ -4,7 +4,7 @@ require("@nomicfoundation/hardhat-toolbox");
 require("@nomicfoundation/hardhat-toolbox");
 require("dotenv").config();
 
-let accounts = [process.env.PRIVATE_KEY, process.env.PRIVATE_KEY_2];
+let accounts = [process.env.PRIVATE_KEY];
 
 /** @type import('hardhat/config').HardhatUserConfig */
 module.exports = {
@@ -28,7 +28,7 @@ module.exports = {
     },
     sepolia: {
       url: process.env.SEPOLIA_RPC_URL || "",
-      accounts: process.env.PRIVATE_KEY ? accounts : [],
+      accounts: process.env.PRIVATE_KEY ? [process.env.PRIVATE_KEY] : [],
       chainId: 11155111,
     },
     mumbai: {
